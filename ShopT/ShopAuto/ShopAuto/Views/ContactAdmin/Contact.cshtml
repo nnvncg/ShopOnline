@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewBag.Title = "Quản lý liên hệ";
+    Layout = "~/Views/layout/_LayoutAdmin.cshtml";
+}
+<div class="row-fluid" ng-controller="ContactAdmin" ng-cloak>
+    <div class="col-sm-3">
+        <div class="col-sm-12 mb-5" style="box-shadow:3px 3px 3px 3px #708090">
+            <h3 class="text-center bg-success">Tìm kiếm</h3>
+            <hr />
+            <form class="form-inline">
+                <input class="form-control" style="width:100%" type="search" placeholder="Nhập tên..." ng-model="search.Name" aria-label="Tìm kiếm...">
+            </form>
+            <br />
+            <hr />
+            <p>Ngày cần tìm</p> 
+            <ng-datepicker ng-model="date1" ng-change="checkDate()" first-week-day-sunday="true" style="max-width:100%" placeholder="Chọn ngày..">
+            </ng-datepicker>
+            <br />
+            <div class="form-group">
+                <button class="btn btn-link" ng-click="seen()">Chưa xem</button>
+                <button class="btn btn-link" ng-click="All()">Tất cả</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-8">
+        <div class="col-sm-4" style="margin-top:1em" ng-repeat="n in dataContact|filter:search|range:(selectedPage-1)*pageSize|limitTo:pageSize">
+            <div class="col-sm-12" style="box-shadow:3px 3px 3px 3px #708090">
+                <i class="fa fa-trash-alt"></i>
+                <h3 class="col-sm-12 text-center bg-warning"><strong>{{n.Name}}</strong></h3>
+                <hr />
+                <p>{{n.Content.substring(0,30)}}</p>
+                <small class="text-danger">{{n.Status|seen}}</small>
+                <small class="col-sm-12 text-justify float-right">{{n.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</small>
+                <div>
+                    <button class="btn btn-link" ng-click="reply(n.ID)" data-toggle="modal" data-target="#exampleModal">Xem chi tiết</button>
+                    <div ng-hide="CheckAutDelete">
+                        <button class="btn btn-link" ng-click="remove(n.ID)" ng-hide="n.Status==false" data-toggle="modal" data-target="#exampleModal2">Xóa</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12" style="margin-top:2em">
+            <div class="float-right">
+                <a class="btn btn-light" ng-class="PagePrevActive()" ng-click="goToPrev()"><small><<</small></a>
+                <a class="btn btn-info" ng-class="PageActive($index+1)" ng-repeat="n in data=(dataContact|pageCount:pageSize)" ng-click="toPage($index+1)">{{$index+1}}</a>
+                <a class="btn btn-light" ng-class="PageNextActive()" ng-click="goToNext()"><small>>></small></a>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="exampleModalLabel">Xóa liên hệ của {{dataDelete.Name}}</h3>
+                        <button type="button" class="close" data-dismiss="modal" ng-click="Clear()" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạn có chắc muốn xóa liên hệ này không</p>
+                        <div>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="" ng-click="Delete(dataDelete.ID)">Có</button>
+                            <button type="button" class="btn btn-secondary" ng-click="Clear()" data-dismiss="modal">Thoát</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="exampleModalLabel">Liên hệ</h3>
+                        <button type="button" class="close" data-dismiss="modal" ng-click="Clear()" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label class="col-sm-3 col-form-label">Tên người gửi: </label>
+                        <div class="col-sm-9">
+                            <p>{{dataCont.Name}}</p>
+                        </div>
+                        <label class="col-sm-3 col-form-label">Email: </label>
+                        <div class="col-sm-9">
+                            <p>{{dataCont.Email}}</p>
+                        </div>
+                        <label class="col-sm-3 col-form-label">Nội dung: </label>
+                        <div class="col-sm-9">
+                            <p>{{dataCont.Content}}</p>
+                        </div>
+                        <label class="col-sm-3 col-form-label">Ngày đăng: </label>
+                        <div class="col-sm-9">
+                            <p>{{dataCont.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</p>
+                        </div>
+
+                        <label class="col-sm-11 text-center col-form-label"> Trả lời </label>
+                        <form name="frmCont">
+                            <label class="col-sm-3 col-form-label">Tiêu đề: </label>
+                            <div class="col-sm-9">
+                                <input type="text" class="col-sm-12" name="Title" ng-model="TitleMail" ng-minlength="5" ng-maxlength="55" required />
+                            </div>
+                            <br />
+                            <label class="col-sm-3 col-form-label">Nội dung: </label>
+                            <div class="col-sm-9">
+                                <br />
+                                <textarea ng-model="Content" name="Content" class="col-sm-12" rows="8" ng-minlength="5" required></textarea>
+                            </div>
+
+                            <div>
+
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="CheckAutReply" ng-click="SendEmail(dataCont.ID)">Gửi</button>
+                                <button type="button" class="btn btn-secondary" ng-click="Clear()" data-dismiss="modal">Thoát</button>
+                            </div>
+                        </form>
+                        <div>
+                            <p class="text-danger" ng-hide="!CheckAutReply">Bạn không có quyền trả lời!!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

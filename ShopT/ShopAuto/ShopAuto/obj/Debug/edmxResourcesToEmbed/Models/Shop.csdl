@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ShopOnlineModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="BillDetail">
+    <Key>
+      <PropertyRef Name="IdBill" />
+      <PropertyRef Name="IdProduct" />
+    </Key>
+    <Property Name="IdBill" Type="Int32" Nullable="false" />
+    <Property Name="IdProduct" Type="Int32" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="Price" Type="Double" />
+    <NavigationProperty Name="Bill" Relationship="ShopOnlineModel.FK_BillDetail_Bill" FromRole="BillDetail" ToRole="Bill" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NameCategory" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Creator" Type="Int32" />
+    <Property Name="Active" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="MenuList">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MenuName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="URLMenu" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="Creator" Type="Int32" />
+  </EntityType>
+  <EntityType Name="ShopInformation">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NameShop" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="IconShop" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="AddressShop" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="About" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+    <Property Name="Phone2" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+    <Property Name="BankAcc" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="FaceBook" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Google" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Zalo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="URLMap" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="Keywords" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityContainer Name="ShopOnlineEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="BillDetails" EntityType="Self.BillDetail" />
+    <EntitySet Name="Categories" EntityType="Self.Category" />
+    <EntitySet Name="MenuLists" EntityType="Self.MenuList" />
+    <EntitySet Name="ShopInformations" EntityType="Self.ShopInformation" />
+    <EntitySet Name="Bills" EntityType="ShopOnlineModel.Bill" />
+    <AssociationSet Name="FK_BillDetail_Bill" Association="ShopOnlineModel.FK_BillDetail_Bill">
+      <End Role="Bill" EntitySet="Bills" />
+      <End Role="BillDetail" EntitySet="BillDetails" />
+    </AssociationSet>
+    <EntitySet Name="StatusBills" EntityType="ShopOnlineModel.StatusBill" />
+    <AssociationSet Name="FK_Bill_StatusBill" Association="ShopOnlineModel.FK_Bill_StatusBill">
+      <End Role="StatusBill" EntitySet="StatusBills" />
+      <End Role="Bill" EntitySet="Bills" />
+    </AssociationSet>
+    <EntitySet Name="Sliders" EntityType="ShopOnlineModel.Slider" />
+    <EntitySet Name="Contacts" EntityType="ShopOnlineModel.Contact" />
+    <EntitySet Name="Decentralizations" EntityType="ShopOnlineModel.Decentralization" />
+    <EntitySet Name="UserGroups" EntityType="ShopOnlineModel.UserGroup" />
+    <EntitySet Name="Products" EntityType="ShopOnlineModel.Product" />
+    <EntitySet Name="Users" EntityType="ShopOnlineModel.User" />
+    <AssociationSet Name="FK_User_UserGroup" Association="ShopOnlineModel.FK_User_UserGroup">
+      <End Role="UserGroup" EntitySet="UserGroups" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <EntitySet Name="Comments" EntityType="ShopOnlineModel.Comment" />
+  </EntityContainer>
+  <EntityType Name="Bill">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TradingCode" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="TotalMoney" Type="Double" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="Seen" Type="Boolean" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="Creator" Type="Int32" />
+    <NavigationProperty Name="BillDetails" Relationship="ShopOnlineModel.FK_BillDetail_Bill" FromRole="Bill" ToRole="BillDetail" />
+    <NavigationProperty Name="StatusBill" Relationship="ShopOnlineModel.FK_Bill_StatusBill" FromRole="Bill" ToRole="StatusBill" />
+  </EntityType>
+  <Association Name="FK_BillDetail_Bill">
+    <End Type="ShopOnlineModel.Bill" Role="Bill" Multiplicity="1" />
+    <End Type="ShopOnlineModel.BillDetail" Role="BillDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Bill">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="BillDetail">
+        <PropertyRef Name="IdBill" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="StatusBill">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NameStatusBill" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="InformationStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="Creator" Type="Int32" />
+    <NavigationProperty Name="Bills" Relationship="ShopOnlineModel.FK_Bill_StatusBill" FromRole="StatusBill" ToRole="Bill" />
+  </EntityType>
+  <Association Name="FK_Bill_StatusBill">
+    <End Type="ShopOnlineModel.StatusBill" Role="StatusBill" Multiplicity="0..1" />
+    <End Type="ShopOnlineModel.Bill" Role="Bill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StatusBill">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Bill">
+        <PropertyRef Name="Status" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Slider">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Image" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Active" Type="Boolean" />
+    <Property Name="Creater" Type="Int32" />
+    <Property Name="DateCreate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="Contact">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Boolean" />
+    <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="Decentralization">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="UserGroup">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NameType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Active" Type="Boolean" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="Creator" Type="Int32" />
+    <Property Name="Authorities" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="Users" Relationship="ShopOnlineModel.FK_User_UserGroup" FromRole="UserGroup" ToRole="User" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Category" Type="Int32" />
+    <Property Name="Detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Source" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="SourceDetail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ShelfLife" Type="DateTime" Precision="3" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="Image" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Double" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="Creator" Type="Int32" />
+    <Property Name="Active" Type="Boolean" />
+    <Property Name="CountOrder" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="11" FixedLength="true" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Image" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="Addess" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="TypeAcc" Type="Int32" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="Active" Type="Boolean" />
+    <Property Name="CodeReset" Type="Int32" />
+    <NavigationProperty Name="UserGroup" Relationship="ShopOnlineModel.FK_User_UserGroup" FromRole="User" ToRole="UserGroup" />
+  </EntityType>
+  <Association Name="FK_User_UserGroup">
+    <End Type="ShopOnlineModel.UserGroup" Role="UserGroup" Multiplicity="0..1" />
+    <End Type="ShopOnlineModel.User" Role="User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserGroup">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="TypeAcc" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Comment">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Comment1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Seem" Type="Boolean" />
+    <Property Name="Creator" Type="Int32" />
+    <Property Name="Product" Type="Int32" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+</Schema>

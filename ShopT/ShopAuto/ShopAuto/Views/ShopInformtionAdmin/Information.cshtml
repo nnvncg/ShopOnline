@@ -1,0 +1,244 @@
+﻿
+@{
+    ViewBag.Title = "Thông tin hiển thị cho cửa hàng";
+    Layout = "~/Views/layout/_LayoutAdmin.cshtml";
+}
+<div class="col-sm-12" ng-controller="InformationStatus">
+    <div class="col-sm-12" style="margin-top:2em;margin-bottom:2em">
+        <div class="card col-sm-3" style="margin-right:1em;width:22em;box-shadow:3px 3px 3px 3px #708090">
+            <div class="card-body card-warning ">
+                <br />
+                <h4 class="card-title text-center alert alert-warning">Giới thiệu</h4>
+                <hr />
+                <div class="form-group form-inline row">
+                    <label class=" col-md-4">Tên</label>
+                    <p class=" col-md-8" style="max-width:100%">{{data.NameShop}}</p>
+                </div>
+                <div class="form-group form-inline row">
+                    <label class=" col-md-4">Icon</label>
+                </div>
+                <div class="form-group form-inline row">
+                    <label class=" col-md-4">Giới thiệu</label>
+                    <p class=" col-md-8" style="max-width:100%" ng-bind-html="data.About"></p>
+                </div>
+                <div class="form-group form-inline row">
+                    <label class=" col-md-4">Địa chỉ</label>
+                    <p class="col-md-8" style="max-width:100%">{{data.AddressShop}}</p>
+                </div>
+                <br />
+                <div class=" float-right">
+                    <button type="button" class="alert alert-info col-sm-12 p-3" ng-click="Introduce()" data-toggle="modal" data-target="#exampleModal">Chỉnh sửa</button>
+                </div>
+            </div>
+        </div>
+        <div class="card col-sm-3" style="margin-right:1em;width:22em;box-shadow:3px 3px 3px 3px #708090">
+            <div class="card-body card-warning">
+                <br />
+                <h4 class="card-title text-center alert alert-warning">Liên Lạc</h4>
+                <hr />
+
+                <div class="form-group form-inline row">
+                    <label class=" col-md-4">Số điện thoại 1</label>
+                    <p class=" col-md-8">{{data.Phone}}</p>
+
+                </div>
+                <div class="form-group form-inline row">
+                    <label class=" col-md-4">Số điện thoại 2</label>
+                    <p class=" col-md-8">{{data.Phone2}}</p>
+                </div>
+                <div class="form-group form-inline row">
+                    <label class=" col-md-4">Email</label>
+                    <p class=" col-md-8">{{data.Email}}</p>
+                </div>
+                <div class="form-group form-inline row">
+                    <label class=" col-md-4">BankAcc</label>
+                    <p class=" col-md-8">{{data.BankAcc}}</p>
+                </div>
+                <br />
+                <div class=" float-right">
+                    <button type="button" class="alert alert-info col-sm-12 p-3" ng-click="Contact()" data-toggle="modal" data-target="#exampleModal">Chỉnh sửa</button>
+                </div>
+            </div>
+        </div>
+        <div class="card col-sm-3" style="margin-right:1em;width:22em;box-shadow:3px 3px 3px 3px #708090">
+            <div class="card-body card-warning">
+                <br />
+                <h4 class="card-title text-center alert alert-warning">Liên hệ khác</h4>
+                <hr />
+                <div class="form-group form-inline row">
+                    <label class=" col-md-3">Facebook</label>
+                    <p class=" col-md-8">{{data.FaceBook}}</p>
+                </div>
+                <div class="form-group form-inline row">
+                    <label class=" col-md-3">Zalo</label>
+                    <p class=" col-md-9">{{data.Zalo}}</p>
+                </div>
+                <div class="form-group form-inline row">
+                    <label class=" col-md-3">Google</label>
+                    <p class=" col-md-9">{{data.Google}}</p>
+                </div>
+
+                <br />
+                <div class=" float-right">
+                    <button type="button" class="alert alert-info col-sm-12 p-3" ng-click="Contact2()" data-toggle="modal" data-target="#exampleModal">Chỉnh sửa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel">Sửa thông tin</h4>
+                    <button type="button" class="close"ng-click="Clear"  data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div ng-hide="IntroduceHide">
+                        <form name="frmInt">
+                            <div class="form-group form-inline row">
+                                <label class=" col-md-2">Tên</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="ShopName" ng-model="data2.NameShop" />
+                                </div>
+                            </div>
+                            <div class="form-group form-inline row">
+                                <label class=" col-md-2">Icon</label>
+                                <div class="col-sm-10">
+                                    <input type="file" ngf-select ng-model="Image" name="file"
+                                           accept=".ico" ngf-max-size="2MB" required
+                                           ngf-model-invalid="errorFile">
+                                </div>
+
+                            </div>
+                            <div class="form-group form-inline row">
+                                <label class=" col-md-2">Giới thiệu</label>
+                                <div class="col-sm-10">
+                                    <div ckeditor="options" ng-model="data2.About" ready="onReady()"></div>
+                                </div>
+                            </div>
+                            <div class="form-group form-inline row">
+                                <label class=" col-md-2">Địa chỉ</label>
+                                <div class="col-sm-10">
+                                    <input class="col-sm-10" type="text" name="AddressShop" ng-model="data2.AddressShop" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div ng-hide="ContactHide">
+                        <form name="frmCont">
+                            <div class="form-group form-inline row">
+                                <label class=" col-md-3">Số điện thoại 1</label>
+                                <div class="col-sm-5">
+                                    <input type="text" name="Phone" ng-model="data2.Phone" required ng-maxlength="13" ng-minlength="9" ng-pattern="/^[0-9]+$/" />
+                                </div>
+                                <div class="col-sm-4 text-danger">
+                                    <div ng-hide="!frmCont.Phone.$error.required">Không được để trống..</div>
+                                    <div ng-hide="!frmCont.Phone.$error.pattern">Số điện thoại sai</div>
+                                    <div ng-hide="!frmCont.Phone.$error.minlength">Số điện thoại sai</div>
+                                    <div ng-hide="!frmCont.Phone.$error.maxlength">Số điện thoại sai</div>
+                                </div>
+                            </div>
+                            <div class="form-group form-inline row">
+                                <label class=" col-md-3">Số điện thoại 2</label>
+                                <div class="col-sm-5">
+                                    <input type="text" name="Phone2" ng-model="data2.Phone2" ng-maxlength="13" ng-minlength="9" ng-pattern="/^[0-9]+$/" />
+
+                                </div>
+                                <div class="col-sm-4 text-danger">
+                                    <div ng-hide="!frmCont.Phone2.$error.pattern">Số điện thoại sai</div>
+                                    <div ng-hide="!frmCont.Phone2.$error.minlength">Số điện thoại sai</div>
+                                    <div ng-hide="!frmCont.Phone2.$error.maxlength">Số điện thoại sai</div>
+                                </div>
+                            </div>
+                            <div class="form-group form-inline row">
+                                <label class=" col-md-3">Email</label>
+                                <div class="col-sm-5">
+                                    <input type="email" name="Email" ng-model="data2.Email" required />
+                                </div>
+                                <div class="col-sm-4 text-danger">
+                                    <div ng-hide="!frmCont.Email.$error.required">Không được để trống..</div>
+                                    <div ng-hide="!frmCont.Email.$error.minlength">Bạn phải nhập 10 kí tự trở lên</div>
+                                    <div ng-hide="!frmCont.Email.$error.email">Email không hợp lệ</div>
+                                </div>
+                            </div>
+                            <div class="form-group form-inline row">
+                                <label class=" col-md-3">Tài khoản ngân hàng</label>
+                                <div class="col-sm-5">
+                                    <input type="text" name="BankAcc" ng-model="data2.BankAcc" required ng-minlength="10" />
+                                </div>
+                                <div class="col-sm-4 text-danger">
+                                    <div ng-hide="!frmCont.BankAcc.$error.required">Không được để trống..</div>
+                                    <div ng-hide="!frmCont.BankAcc.$error.minlength">Bạn phải nhập 10 kí tự trở lên</div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div ng-hide="Contact2Hide">
+                        <form name="frmCont2">
+                            <div class="form-group form-inline row">
+                                <label class=" col-md-3">FaceBook</label>
+                                <div class="col-sm-5">
+                                    <input type="text" name="faceBook" ng-model="data2.FaceBook" ng-minlength="8" required ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/"/>
+                                </div>
+                                <div class="col-sm-4 text-danger">
+                                    <div ng-hide="!frmCont2.faceBook.$error.required">Không được để trống..</div>
+                                    <div ng-hide="!frmCont2.faceBook.$error.pattern">Địa chỉ sai.</div>
+                                    <div ng-hide="!frmCont2.faceBook.$error.minlength">Địa chỉ sai quá ngắn</div>
+                                </div>
+                            </div>
+                            <div class="form-group form-inline row">
+                                <label class=" col-md-3">Google</label>
+                                <div class="col-sm-5">
+                                    <input type="text" name="google" ng-model="data2.Google" ng-minlength="8" required ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/"/>
+                                </div>
+                                <div class="col-sm-4 text-danger">
+                                    <div ng-hide="!frmCont2.google.$error.required">Không được để trống..</div>
+                                    <div ng-hide="!frmCont2.google.$error.pattern">Địa chỉ sai.</div>
+                                    <div ng-hide="!frmCont2.google.$error.minlength">Địa chỉ sai quá ngắn</div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="Clear" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="IntroduceSave(Image)" ng-hide="IntroduceHide" data-dismiss="modal">Lưu thay đổi.</button>
+                    <button type="button" class="btn btn-primary" ng-click="ContactSave()" ng-disabled="frmCont.$invalid" ng-hide="ContactHide" data-dismiss="modal">Lưu thay đổi.</button>
+                    <button type="button" class="btn btn-primary" ng-click="Contact2Save()" ng-disabled="frmCont2.$invalid" ng-hide="Contact2Hide" data-dismiss="modal">Lưu thay đổi.</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*tee*@
+    @*<div class="col-sm-12" style="margin-top:2em;margin-bottom:2em">
+            <div class="card col-sm-3" style="margin-right:1em;width:22em;box-shadow:3px 3px 3px 3px #708090">
+                <div class="card-body card-warning ">
+                    <br />
+                    <h4 class="card-title text-center alert alert-warning">Từ khóa tìm kiếm</h4>
+                    <hr />
+                    <div class="form-group form-inline row">
+                        <p class=" col-md-8" style="max-width:100%">{{data.Keyword}}</p>
+                    </div>
+                    <br />
+                    <div class=" float-right">
+                        <button type="button" class="alert alert-info col-sm-12 p-3">Chỉnh sửa</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card col-sm-3" style="margin-right:1em;width:22em;box-shadow:3px 3px 3px 3px #708090">
+                <div class="card-body card-warning">
+                    <br />
+                    <h4 class="card-title text-center alert alert-warning">Google Map</h4>
+                    <hr />
+                    <div class="form-group form-inline row">
+
+                        <div class=" float-right">
+                            <button type="button" class="alert alert-info col-sm-12 p-3">Chỉnh sửa</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+</div>

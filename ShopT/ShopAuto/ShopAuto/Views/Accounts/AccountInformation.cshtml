@@ -1,0 +1,153 @@
+﻿@model ShopAuto.Models.User
+@{
+    ViewBag.Title = "Tài khoản của bạn";
+    Layout = "~/Views/layout/_LayoutCustomer.cshtml";
+}
+<style>
+    #carouselExampleIndicators {
+        display: none;
+    }
+</style>
+<div class="bg-faded p-4 my-4" id="MonAn">
+    <hr class="divider">
+    <h2 class="text-center text-lg text-uppercase my-0">
+        Thông tin <strong>tài khoản</strong>
+    </h2>
+    <hr class="divider">
+    <div class="row">
+
+        <!-- Nav tabs -->
+        <div class="nav flex-column nav-pills border border-secondary alert alert-success ml-3" style="box-shadow: 5px 3px 5px #708090" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">
+                <img src="~/Content/img/TaiKhoan/AccountDetail/users.png" />
+                <p>Tài khoản</p>
+            </a>
+            <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+                <img src="~/Content/img/TaiKhoan/AccountDetail/attachment.png" />
+                <p>Hóa đơn</p>
+            </a>
+            <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">
+                <img src="~/Content/img/TaiKhoan/AccountDetail/page_process.png" />
+                <p>Mật khẩu</p>
+            </a>
+        </div>
+        <div class="tab-content ml-3 alert alert-success" id="v-pills-tabContent" style="box-shadow: 5px 3px 5px #708090">
+            <div class="tab-pane fade show active " id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                <div class="float-left">
+                    <div>
+                        @if (Model.Image == "" || Model.Image == null)
+                        {
+                            <img src="~/Content/img/TaiKhoan/hinhdd.jpg" alt="@Model.LastName" style="width:50%" class="rounded-circle">
+                        }
+                        else
+                        {
+                            <img src="@Model.Image" alt="@Model.LastName" style="width:50%" class="rounded-circle">
+                        }
+                    </div>
+                    <div>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal_11_1">
+                            Thay hình đại diện
+                        </button>
+                        @ViewBag.Message
+                    </div>
+                </div>
+
+                <div class="float-left">
+                    @using (Html.BeginForm("UpdateInformation", "Accounts", FormMethod.Post))
+                    {
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Email</label>
+                            <div class="col-sm-8">
+                                <label for="inputEmail3" class="col-sm-8 col-form-label">@Model.Email</label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="FirstName" class="col-sm-4 col-form-label">Họ</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="FirstName" name="FirstName" value="@Model.FirstName" placeholder="Họ">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="LastName" class="col-sm-4 col-form-label">Tên</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="LastName" name="LastName" value="@Model.LastName" placeholder="Tên">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Phone" class="col-sm-4 col-form-label">Điện thoại</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="Phone" name="Phone" value="@Model.Phone" placeholder="Số điện thoại">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Address" class="col-sm-4 col-form-label">Địa chỉ</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="Address" name="Address" value="@Model.Addess" placeholder="Địa chỉ">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-sm-10">
+                                <button type="submit" id="UpdateAcc" class="btn btn-primary">Cập nhập</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                @Html.Action("OrderByAccount","Accounts")
+            </div>
+            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                @ViewBag.message2
+                @using (Html.BeginForm("ChangePass", "Accounts", FormMethod.Post))
+                {
+
+                    <div class="form-group row">
+                        <label for="OldPass" class="col-sm-4 col-form-label">Mật khẩu cũ</label>
+                        <div class="col-sm-8">
+                            <input type="password" class="form-control" id="OldPass" name="OldPass" value="" placeholder="Mật khẩu cũ">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="NewPass" class="col-sm-4 col-form-label">Mật khẩu mới</label>
+                        <div class="col-sm-8">
+                            <input type="password" class="form-control" id="NewPass" name="NewPass" pattern=".{6,}" value="" placeholder="Mật khẩu mới"title="Mật khẩu phải từ 6 kí tự trở lên">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="NewPass2" class="col-sm-4 col-form-label">Nhập lại mật khẩu</label>
+                        <div class="col-sm-8">
+                            <input type="password" class="form-control" id="NewPass2" name="NewPass2" value=""  pattern=".{6,}" placeholder="Xác nhận mật khẩu mới" title="Mật khẩu phải từ 6 kí tự trở lên">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Cập nhập</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal_11_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @using (Html.BeginForm("Upload", "Accounts", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="modal-body">
+                        <div id="imagePreview"></div>
+                        <input id="uploadFile" type="file" name="image" accept=".png,.jpg" class="img" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <button type="submit" id="SaveImage" class="btn btn-primary">Lưu lại</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

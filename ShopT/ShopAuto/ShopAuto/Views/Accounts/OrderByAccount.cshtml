@@ -1,0 +1,53 @@
+﻿@using ShopAuto.Models
+@model List<Bill>
+
+<div class="form-group" ng-controller="OrderByAcc" >
+    <div class="float-left  form-inline mb-3">
+        <label for="inputState">Hóa đơn&nbsp;&nbsp;</label>
+        <select id="inputState" class="form-control"
+                ng-change="ChangeOrder()"
+                ng-model="orderInAcc"
+                name="orderInAcc">
+            
+            @foreach (var item in Model)
+            {
+                <option ng-value="@item.TradingCode">@item.TradingCode</option>
+            }
+        </select>
+
+    </div>
+    <div>
+        <div class="card col-md-12">
+            <div class="card-body">
+                <h5 class="card-title">Mã hóa đơn {{orderInAcc}}</h5>
+                <h6 class="card-title">Tình trạng {{tatus.NameStatusBill}}</h6>
+                <h6 class="card-title">Tổng tiền {{myData.TotalMoney| currency:"":0}} VND.&nbsp;</h6>
+                <h6 class="card-title">&nbsp;Ngày đặt {{myData.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</h6>
+                <h6 class="card-title ng-{{Hide}}"><strong>Hóa đơn chi tiết</strong></h6>
+                <p class="card-text ng-{{Hide}}">
+                    <table class="table table-striped ng-{{Hide}}">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Mặt hàng</th>
+                                <th scope="col">Số lượng</th>
+                                <th scope="col">Đơn giá</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-repeat="n in dataBillDetail">
+                            <tr>
+                                <th scope="row">{{$index + 1}}</th>
+                                <td>{{Product[$index]}}</td>
+                                <td>{{n.Quantity}}</td>
+                                <td>{{n.Price| currency:"":0}} VND</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewBag.Title = "Quản lý bình luận";
+    Layout = "~/Views/layout/_LayoutAdmin.cshtml";
+}
+
+<div class="row-fluid" ng-controller="CommentAdmin" ng-cloak>
+    <div class="col-sm-3">
+        <div class="col-sm-12" style="box-shadow:3px 3px 3px 3px #708090">
+            <h3 class="text-center bg-success">Danh mục {{ViewComment|typeComment}}</h3>
+            <hr />
+            <div class="form-group form-inline">
+                <small class=" col-md-4">Xếp theo</small>
+                <select name="OrderComment" id="OrderComment" ng-change="ChangeCommt(ViewComment)" ng-model="ViewComment" class="form-control">
+                    <option value="1" selected>Chưa xem</option>
+                    <option value="2">Tất cả</option>
+                    <option value="3">Trong ngày</option>
+                    <option value="4">Trong tuần</option>
+                    <option value="5">Trong tháng</option>
+                </select>
+            </div>
+            <div>
+                <div ng-repeat="n in dataComment|range:(selectedPage-1)*pageSize|limitTo:pageSize">
+                    <div class="form-group form-inline" ng-repeat="acc in accountAll| filter:{ 'ID':  n.Creator}:true">
+                        <img ng-src="{{acc.Image}}" class="col-sm-4 rounded-circle" alt="Hinh dai dien" />
+                        <a ng-click="ProdById(n.ID)">
+                            <p><strong class="text-dark">{{acc.FirstName}} {{acc.LastName}}:</strong></p>
+                            <small>{{n.Comment1.substring(0,50)}}</small>
+                        </a>
+                        <hr />
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <a class="btn btn-light" ng-class="PagePrevActive()" ng-click="goToPrev()"><small><<</small></a>
+                    <a class="btn btn-info" ng-class="PageActive($index+1)" ng-hide="test($index+1)" ng-repeat="n in data=(dataComment|pageCount:pageSize)" ng-click="toPage($index+1)">{{$index+1}}</a>
+                    <a class="btn btn-light" ng-class="PageNextActive()" ng-click="goToNext()"><small>>></small></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="col-sm-12" style="box-shadow:3px 3px 3px 3px #708090">
+            <div>
+                <h2 class="text-center">{{data1.ProductName}}</h2>
+                <hr />
+            </div>
+            <div class="form-group" ng-hide="Hide">
+                <label for="exampleFormControlTextarea1">Trả lời</label>
+                <form name="frmcmt">
+                    <textarea class="form-control" name="reply" ng-model="replyComment" placeholder="Nhập 3 lý tự trở lên" rows="3" ng-minlength="3" required></textarea>
+                    <button class="btn btn-success" ng-disabled="frmcmt.reply.$invalid" ng-click="reply(data1.ID)">Gửi</button>
+                </form>
+            </div>
+            <div ng-repeat="n in dataCmtByProd|range:(selectedPage1-1)*pageSize1|limitTo:pageSize1">
+
+                <div class="form-group form-inline col-sm-12" ng-repeat="acc in accountAll| filter:{ 'ID':  n.Creator}:true">
+                    <img ng-src="{{acc.Image}}" class="col-sm-2 rounded-circle" alt="Hinh dai dien" />
+                    <p><strong class="text-dark col-sm-8">{{acc.FirstName}} {{acc.LastName}}:</strong><i class="fa fa-times-circle col-sm-2" ng-hide="CheckAutDelete" ng-click="delteCmt(n.ID)" data-toggle="modal" data-target="#exampleModal"></i></p>
+                    <small class="col-sm-9">{{n.Comment1}}</small>
+                    <hr class="col-sm-10" />
+                </div>
+
+            </div>
+            <div class="form-group form-inline">
+                <a class="btn btn-light" ng-class="PagePrevActive1()" ng-click="goToPrev1()"><small><<</small></a>
+                <a class="btn btn-info" ng-class="PageActive1($index+1)" ng-repeat="n in data2=(dataCmtByProd|pageCount:pageSize1)" ng-click="toPage1($index+1)">{{$index+1}}</a>
+                <a class="btn btn-light" ng-class="PageNextActive1()" ng-click="goToNext1()"><small>>></small></a>
+            </div>
+        </div>
+        <!-- Modal xóa-->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="exampleModalLabel">Xác nhận xóa</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="col-sm-12 text-center text-danger">Bạn có chắc muốn xóa bình luận này không</p>
+                        <br />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary">Không</button>
+                        <button type="button" class="btn btn-primary" ng-click="ApllyDelete()" data-dismiss="modal">xác nhận</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

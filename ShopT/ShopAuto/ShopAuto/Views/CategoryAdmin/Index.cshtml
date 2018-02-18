@@ -1,0 +1,151 @@
+﻿
+@{
+    ViewBag.Title = "Loại sản phẩm";
+    Layout = "~/Views/layout/_LayoutAdmin.cshtml";
+}
+
+<div class="row-fluid" ng-controller="CategoryAdmin" ng-cloak>
+    <div id="sample-table-2_wrapper" style="overflow-x:scroll" class="dataTables_wrapper" role="grid">
+        <div class="input-group custom-search-form col-sm-4 col-2 d-inline">
+            <input type="text" class="form-control" ng-model="searchInput" placeholder="Search...">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button">
+                    <i class="fa fa-search"></i>
+                </button>
+            </span>
+        </div>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" style="width:4%">#</th>
+                    <th scope="col">Tên Loại</th>
+                    <th scope="col">Thông tin</th>
+                    <th scope="col">Người tạo</th>
+                    <th scope="col">Kích hoạt</th>
+                    <th scope="col">
+                        <button class="btn btn-link" ng-click="AddCategory()"ng-hide="CheckAutAdd" data-toggle="modal" data-target="#exampleModal-99" title="Thêm mới sản phẩm">Thêm mới</button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="n in dataCategory|filter:searchInput|range:(selectedPage-1)*pageSize|limitTo:pageSize">
+                <tr>
+                    <th scope="row">{{(selectedPage-1)*pageSize + $index +1}}</th>
+                    <td>{{n.NameCategory}}</td>
+                    <td class="col-sm-3" ng-bind-html="n.Detail.substring(0,50)"></td>
+                    <td ng-repeat="acc in accountAll| filter:{ 'ID':  n.Creator}:true">{{acc.FirstName}} {{acc.LastName}}</td>
+                    <td>
+                        <a ng-hide="CheckAutEdit" ng-click="checkStatus(n.ID)">{{n.Active|status}}</a>
+                        <p ng-hide="!CheckAutEdit">{{n.Active|status}}</p>
+                    </td>
+                    <td class="d-inline">
+                        <button class="fa fa-info btn  btn-outline-success" ng-click="DetailCategorytAd(n.ID)" aria-hidden="true" title="Xem thông tin chi tiết." data-toggle="modal" data-target="#exampleModal-99"></button>&nbsp;
+                        <button class="fa fa-pencil-square-o btn btn-outline-success" ng-hide="CheckAutEdit" aria-hidden="true" ng-click="EditCategorytAd(n.ID)" title="Sửa sản phẩm" data-toggle="modal" data-target="#exampleModal-99"></button>&nbsp;
+                        <button class="fa fa-trash-o btn btn-outline-success" ng-hide="CheckAutDelete" ng-click="DeleteCategorytAd(n.ID)" aria-hidden="true" title="Xóa sản phẩm." data-toggle="modal" data-target="#exampleModal-99"></button>
+                    </td>
+                </tr>
+
+            </tbody>
+            <tr class="float-right d-inline">
+                <td colspan="5" class="ml-5">
+                    <a class="btn btn-light" ng-class="PagePrevActive()" ng-click="goToPrev()"><small><<<</small></a>
+                    <a class="btn btn-info" ng-class="PageActive($index+1)" ng-repeat="n in data=(dataCategory|pageCount:pageSize)" ng-click="toPage($index+1)">{{$index+1}}</a>
+                    <a class="btn btn-light" ng-class="PageNextActive()" ng-click="goToNext()"><small>>>></small></a>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    @*edit*@
+    <div class="modal fade" id="exampleModal-99" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" ng-hide="AddHide">Thêm sản phẩm mới</h4>
+                    <h4 class="modal-title" ng-hide="DetailHide">{{dataDetail.NameCategory| uppercase}}</h4>
+                    <h4 class="modal-title" ng-hide="EditHide">{{dataEdit.NameCategory| uppercase}}</h4>
+                    <h4 class="modal-title" ng-hide="DeleteHide">{{dataDelete.NameCategory| uppercase}}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="Clear()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @*modal add*@
+                <div class="modal-body animate-show-hide" ng-hide="AddHide">
+                    <form name="frmAdd">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Tên slider: </label>
+                            <div class="col-sm-10">
+                                <input class="col-sm-5" type="text" ng-model="dataAdd.NameCategory" name="Name" ng-minlength="5" required />
+                                <div class="col-sm-6 text-danger">
+                                    <div ng-hide="!frmAdd.Name.$error.required">Không được để trống..</div>
+                                    <div ng-hide="!frmAdd.Name.$error.minlength">Bạn phải nhập 5 kí tự trở lên</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Chi tiết: </label>
+                            <div class="col-sm-10">
+                                <div ckeditor="options" ng-model="dataAdd.Detail" ready="onReady()"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                @*modal sua*@
+                <div class="modal-body animate-show-hide" ng-hide="EditHide">
+                    <form name="frmEdit">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Tên slider: </label>
+                            <div class="col-sm-10">
+                                <input class="col-sm-5" type="text" ng-model="dataEdit.NameCategory" name="Name" ng-minlength="5" required />
+                                <div class="col-sm-6 text-danger">
+                                    <div ng-hide="!frmEdit.Name.$error.required">Không được để trống..</div>
+                                    <div ng-hide="!frmEdit.Name.$error.minlength">Bạn phải nhập 5 kí tự trở lên</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Chi tiết: </label>
+                            <div class="col-sm-10">
+                                <div ckeditor="options" ng-model="dataEdit.Detail" ready="onReady()"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                @*Hien thi modal xóa*@
+
+                <div class="modal-body pre-scrollable animate-show-hide" ng-hide="DeleteHide">
+                    <h4> Bạn có chắc chắn muốn xóa loại sản phẩm này!!</h4>
+                </div>
+
+                @*Hien thi modal chi tiết*@
+
+                <div class="modal-body pre-scrollable animate-show-hide" ng-hide="DetailHide" style="min-height: 450px">
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Tên loại</label>
+                        <div class="col-sm-8">
+                            <p>{{dataDetail.NameCategory}}</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Chi tiết</label>
+                        <div class="col-sm-8">
+                            <p ng-bind-html="dataDetail.Detail"></p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Người tạo</label>
+                        <div class="col-sm-8">
+                            <p  ng-repeat="acc in accountAll| filter:{ 'ID':  dataDetail.Creator}:true">{{acc.FirstName}} {{acc.LastName}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-disabled="!frmEdit.Name.$valid" ng-click="ApplyEdit()" ng-hide="EditHide" data-dismiss="modal">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" ng-disabled="!frmAdd.Name.$valid" ng-click="ApplyAdd()" ng-hide="AddHide" data-dismiss="modal">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" ng-click="ApplyDelete(dataDelete.ID)" ng-hide="DeleteHide" data-dismiss="modal">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="Clear()">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "Thanh toán";
+    Layout = "~/Views/layout/_LayoutCustomer.cshtml";
+}
+<style>
+    #carouselExampleIndicators, #Cart {
+        display: none;
+    }
+</style>
+<div class="bg-faded p-4 my-4" id="MonAn" ng-controller="Cart" ng-cloak>
+    <hr class="divider">
+    <h2 class="text-center text-lg text-uppercase my-0">
+        Thanh <strong>Toán</strong>
+    </h2>
+    <hr class="divider">
+    <div class="row">
+        <div class="col-sm-5 bg-blue">
+            <h4><strong>Thông tin mua hàng</strong></h4>
+            <hr />
+            <form>
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="Nhập email">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Nhập tên">
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="Nhập số điện thoại">
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="Nhập địa chỉ">
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input ml-sm-2" id="exampleCheck1">
+                    <label class="form-check-label ml-sm-2" for="exampleCheck1">Địa chỉ khác</label>
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Ghi chú"></textarea>
+                </div>
+                <button>Đặt hàng</button>
+
+            </form>
+            <hr />
+        </div>
+        <div class="col-sm-7">
+            <h4><strong>Hóa đơn</strong> ({{count}} sản phẩm)</h4>
+            <hr />
+            <div>
+                <div class=" pre-scrollable">
+                    <div class="form-inline" ng-repeat="n in myData2">
+                        <button class="col-sm-4 btn btn-link">
+                            <img ng-src="{{n.ProImage}}" alt="{{n.ProName}}" class="col-sm-9 rounded img-thumbnail" />
+                            <span class="badge badge-light align-top">{{n.ProQuantity}}</span>
+                        </button>
+                        <p class="col-sm-5">{{n.ProName}}</p>
+                        <p class="col-sm-3">{{n.ProPrice| currency:"":0}} VND</p>
+                    </div>
+                </div>
+                
+                <hr class="text-center" />
+                <div>
+                    <div class="form-inline">
+                        <i class="fa fa-money fa-2x ml-3 text-success"></i><p class="m-0">&nbsp;&nbsp;Tổng tiền tạm thời {{totalMoney| currency:"":0}} VND  &nbsp;&nbsp; &nbsp; +&nbsp;</p>
+                        <i class="fa fa-money fa-2x ml-3 text-success"></i><p class="m-0">&nbsp;&nbsp;Phí vận chuyển là 20,000vnd</p>
+                    </div>
+                    <br />
+                    <div class="form-inline ml-5 ">
+
+                        == <i class="fa fa-money fa-2x ml-3 text-success"></i><p class="m-0 text-success">&nbsp;&nbsp;Số tiền bạn cần trả {{(totalMoney+20000)|currency:"":0}} VND </p>
+                    </div>
+                </div>
+                <hr class="text-center" />
+                <div class="form-inline">
+                    <i class="fa fa-first-order fa-2x ml-3 text-success "></i><p class="m-0">&nbsp;&nbsp;Thanh toán khi giao sản phẩm.</p>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,395 @@
+﻿
+@{
+    ViewBag.Title = "Quản lý tài khoản";
+    Layout = "~/Views/layout/_LayoutAdmin.cshtml";
+}
+<div class="row" ng-controller="AccountAdmin" ng-cloak>
+    <div class="col-sm-9 ">
+        <div class="panel panel-green">
+            <div class="panel-heading text-center" ng-hide="userHide">Thông tin tài khoản</div>
+            <div class="panel-heading text-center" ng-hide="AllHide">Danh sách tài khoản</div>
+            <div class="panel-heading text-center" ng-hide="AddHide">Thêm tài khoản mới</div>
+            <div class="panel-body" ng-hide="userHide">
+                <div class="list-group">
+                    <div class="list-group-item col-sm-3">
+                        <img ng-src="{{dataUser.Image}}" class="col-sm-12" alt="{{dataUser.LastName}}" />
+                        <button class="btn btn-link" data-toggle="modal" data-target="#exampleModalLong">Hình đại diện</button>
+                    </div>
+                    <div class="list-group-item col-sm-9">
+                        <div class="d-inline">
+                            <p class="col-sm-3"><strong>Tên hiển thị</strong></p>
+                            <p class="col-sm-7">{{dataUser.FirstName}} {{dataUser.LastName}}</p>
+                            <button class="col-sm-2 btn btn-link" type="button" data-toggle="collapse" data-target="#multiCollapseExample1" aria-expanded="false" aria-controls="multiCollapseExample1">sửa tên</button>
+                            @*sửa tên*@
+                            <div class="col-sm-12">
+                                <div class="col ">
+                                    <div class="collapse multi-collapse" id="multiCollapseExample1">
+                                        <div class="card card-body">
+                                            <hr />
+                                            <h4 class="text-center">Sửa tên hiển thị</h4>
+                                            <hr />
+                                            <form class="ml-2" name="frmEditName">
+                                                <div class="form-group row">
+                                                    <label for="staticEmail" class="col-sm-2 col-form-label text-center">Họ</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" name="FirstName" ng-model="FirstName" placeholder="Nhập tên..." required ng-minlength="5" ng-maxlength="30">
+                                                    </div>
+                                                    <div class="col-sm-4 text-danger">
+                                                        <div ng-hide="!frmEditName.FirstName.$error.required">Không được để trống..</div>
+                                                        <div ng-hide="!frmEditName.FirstName.$error.minlength">Họ phải dài hơn 5 kí tự</div>
+                                                        <div ng-hide="!frmEditName.FirstName.$error.maxlength">Họ quá dài.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="inputPassword" class="col-sm-2 col-form-label text-center">Tên</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" name="Name" ng-model="LastName" placeholder="Nhập tên..." required ng-minlength="5" ng-maxlength="30">
+                                                    </div>
+                                                    <div class="col-sm-4 text-danger">
+                                                        <div ng-hide="!frmEditName.Name.$error.required">Không được để trống..</div>
+                                                        <div ng-hide="!frmEditName.Name.$error.minlength">Tên phải dài hơn 5 kí tự</div>
+                                                        <div ng-hide="!frmEditName.Name.$error.maxlength">Tên quá dài.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <button class="col-sm-4 btn btn-primary pull-right" ng-click="ChangeName()" ng-disabled="!frmEditName.$valid">Sửa</button>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-inline">
+                            <hr />
+                            <p class="col-sm-3"><strong>Email</strong></p>
+                            <p class="col-sm-9">{{dataUser.Email}}</p>
+                        </div>
+                        <div class="d-inline">
+                            <p class="col-sm-3"><strong>Số điện thoại</strong></p>
+                            <p class="col-sm-7">{{dataUser.Phone}}</p>
+                            <button class="col-sm-2 btn btn-link" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample1">điện thoại</button>
+                            <div class="col-sm-12">
+                                <div class="col ">
+                                    <div class="collapse multi-collapse" id="multiCollapseExample2">
+                                        <div class="card card-body">
+                                            <hr />
+                                            <h4 class="text-center">Sửa số điện thoại</h4>
+                                            <hr />
+                                            <form class="ml-2" name="frmEditPhone">
+                                                <div class="form-group row">
+                                                    <label for="staticEmail" class="col-sm-2 col-form-label text-center">Điện thoại</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" name="Phone" ng-model="Phone" placeholder="Nhập số điện thoại..." required ng-minlength="9" ng-maxlength="11" ng-pattern="/^[0-9]+$/">
+                                                    </div>
+                                                    <div class="col-sm-4 text-danger">
+                                                        <div ng-hide="!frmEditPhone.Phone.$error.required">Không được để trống..</div>
+                                                        <div ng-hide="!frmEditPhone.Phone.$error.minlength">Số điện thoại sai.</div>
+                                                        <div ng-hide="!frmEditPhone.Phone.$error.maxlength">Số điện thoại sai.</div>
+                                                        <div ng-hide="!frmEditPhone.Phone.$error.pattern">Số điện thoại sai.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <button class="col-sm-4 btn btn-primary pull-right" ng-click="ChangePhone()" ng-disabled="!frmEditPhone.Phone.$valid">Sửa</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-inline">
+                            <hr />
+                            <p class="col-sm-3"><strong>Địa chỉ</strong></p>
+                            <p class="col-sm-7">{{dataUser.Addess}}</p>
+                            <button class="col-sm-2 btn btn-link" type="button" data-toggle="collapse" data-target="#multiCollapseExample3" aria-expanded="false" aria-controls="multiCollapseExample1">Địa chỉ</button>
+                            <div class="col-sm-12">
+                                <div class="col ">
+                                    <div class="collapse multi-collapse" id="multiCollapseExample3">
+                                        <div class="card card-body">
+                                            <hr />
+                                            <h4 class="text-center">Sửa địa chỉ</h4>
+                                            <hr />
+                                            <form class="ml-2" name="frmEditAddess">
+                                                <div class="form-group row">
+                                                    <label for="staticEmail" class="col-sm-2 col-form-label text-center">Điạ chỉ</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" name="Addess" ng-model="Addess" placeholder="Nhập địa chỉ..." required ng-minlength="9" ng-maxlength="80">
+                                                    </div>
+                                                    <div class="col-sm-4 text-danger">
+                                                        <div ng-hide="!frmEditAddess.Addess.$error.required">Không được để trống..</div>
+                                                        <div ng-hide="!frmEditAddess.Addess.$error.minlength">Địa chỉ quá ngắn.</div>
+                                                        <div ng-hide="!frmEditAddess.Addess.$error.maxlength">Địa chỉ quá dài.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <button class="col-sm-4 btn btn-primary pull-right" ng-click="ChangeAddess()" ng-disabled="!frmEditAddess.Addess.$valid">Sửa</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="d-inline">
+
+                            <p class="col-sm-3"><strong>Loại tài khoản</strong></p>
+                            <p class="col-sm-9" ng-repeat="group in dataGroupUser| filter:{ 'ID':  dataUser.TypeAcc}:true">{{group.NameType}}</p>
+                        </div>
+                        <div class="d-inline">
+                            <hr />
+                            <button class="col-sm-3 btn btn-link" data-toggle="collapse" data-target="#multiCollapseExample4" aria-expanded="false" aria-controls="multiCollapseExample4">Đổi mật khẩu</button>
+                            <div class="col-sm-12">
+                                <div class="col ">
+                                    <div class="collapse multi-collapse" id="multiCollapseExample4">
+                                        <div class="card card-body">
+                                            <hr />
+                                            <h4 class="text-center">Đổi mật khẩu</h4>
+                                            <hr />
+                                            <form class="ml-2" name="frmEditPass">
+                                                <div class="form-group row">
+                                                    <label for="staticEmail" class="col-sm-2 col-form-label text-center">Mật khẩu</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="password" class="form-control" name="OldPass" ng-model="OldPass" ng-keyup="CheckPass()" placeholder="Nhập mật khẩu...">
+                                                    </div>
+                                                    <div class="col-sm-4 text-danger">
+                                                        <div ng-hide="OldPassHide">Sai mật khẩu..</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="staticEmail" class="col-sm-2 col-form-label text-center">Mật khẩu mới</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="password" class="form-control" ng-disabled="!OldPassHide" name="NewPass" ng-model="NewPass" placeholder="Nhập mật khẩu mới..." required ng-minlength="6" ng-maxlength="50">
+                                                    </div>
+                                                    <div class="col-sm-4 text-danger">
+                                                        <div ng-hide="!frmEditPass.NewPass.$error.required">Không được để trống..</div>
+                                                        <div ng-hide="!frmEditPass.NewPass.$error.minlength">Mật khẩu quá ngắn.</div>
+                                                        <div ng-hide="!frmEditPass.NewPass.$error.maxlength">Mật khẩu quá dài.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="staticEmail" class="col-sm-2 col-form-label text-center">Xác nhận</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="password" class="form-control" ng-disabled="!frmEditPass.NewPass.$valid" name="ConfirmPass" ng-model="ConfirmPass" placeholder="Nhập lại mật khẩu...">
+                                                    </div>
+                                                    <div class="col-sm-4 text-danger" ng-if="NewPass!=ConfirmPass">
+                                                        <div>Xác nhận mật khẩu sai.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <button class="col-sm-4 btn btn-primary pull-right" ng-click="ChangePassword(NewPass)" ng-disabled="NewPass!=ConfirmPass">Sửa</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="exampleModalLongTitle"><strong>Đổi hình đại diện</strong></h4>
+                                <button type="button" class="close" data-dismiss="modal" ng-click="Clear()" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body row">
+                                <div class="col-sm-12">
+                                    <input type="file" ngf-select ng-model="NewImg" name="file"
+                                           accept="image/*" ngf-max-size="2MB" required
+                                           ngf-model-invalid="errorFile">
+                                </div>
+                                <div class="col-sm-12 mt-4">
+                                    <img ng-show="file.$valid" ngf-thumbnail="NewImg" class="thumb col-sm-12">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="ApplyAdd(NewImg)">Lưu</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="Clear()">Thoát</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            @*all*@
+            <div class="panel-body" ng-hide="AllHide">
+                <div class="col-sm-4" ng-repeat="n in dataAllUser|filter:searchAcc|range:(selectedPage-1)*pageSize|limitTo:pageSize">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <p class="text-center"><strong>Tài khoản</strong></p>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group row">
+                                <img ng-src="{{n.Image}}" class="col-sm-6" alt="Hinh-dai-dien" />
+                                <div class="col-sm-6">
+                                    <p>{{n.FirstName}} {{n.LastName}}</p>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group row">
+                                <p class="col-sm-4">Điện thoại</p>
+                                <div class="col-sm-6">
+                                    <p>{{n.Phone}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <p class="col-sm-4">Email</p>
+                                <div class="col-sm-6">
+                                    <p>{{n.Email}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <p class="col-sm-4">Địa chỉ</p>
+                                <div class="col-sm-6">
+                                    <p>{{n.Addess}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <p class="col-sm-4">Trạng thái</p>
+                                <div class="col-sm-6">
+                                    <button class="btn btn-link" ng-click="ChangeActive2(n.ID)">{{n.Active|status}}</button>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <p class="col-sm-4">Ngày tạo</p>
+                                <div class="col-sm-6">
+                                    <p>{{n.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <p class="col-sm-4">Loại </p>
+                                <div class="col-sm-6">
+
+                                    <select ng-model="selectedTypeUser" ng-change="changeTypeUser(n.ID,selectedTypeUser)">
+                                        <option value="" ng-repeat="group in dataGroupUser| filter:{ 'ID':  n.TypeAcc}:true">{{group.NameType}}</option>
+                                        <option ng-model="tests" ng-repeat="group in dataGroupUser" value="{{group.ID}}">{{group.NameType}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-sm-12" style="margin-top:2em">
+                    <div class="float-right">
+                        <a class="btn btn-light" ng-class="PagePrevActive()" ng-click="goToPrev()"><small><<</small></a>
+                        <a class="btn btn-info" ng-class="PageActive($index+1)" ng-repeat="n in data=(dataAllUser|filter:searchAcc|pageCount:pageSize)" ng-click="toPage($index+1)">{{$index+1}}</a>
+                        <a class="btn btn-light" ng-class="PageNextActive()" ng-click="goToNext()"><small>>></small></a>
+                    </div>
+                </div>
+            </div>
+            @*thêm mơi*@
+            <div class="panel-body" ng-hide="AddHide">
+                <form class="ml-2" name="frmAddAcc">
+                    @*họ*@
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-2 col-form-label text-center">Họ</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="FirstName" ng-model="newAcc.FirstName" placeholder="Nhập họ...">
+                        </div>
+                    </div>
+                    @*tên*@
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-2 col-form-label text-center">Tên</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="LastName" ng-model="newAcc.LastName" placeholder="Nhập tên..." required ng-minlength="4" ng-maxlength="20">
+                        </div>
+                        <div class="col-sm-4 text-danger">
+                            <div ng-hide="!frmAddAcc.LastName.$error.required">Không được để trống..</div>
+                            <div ng-hide="!frmAddAcc.LastName.$error.minlength">Tên phải dài hơn 4 kí tự</div>
+                            <div ng-hide="!frmAddAcc.LastName.$error.maxlength">Tên quá dài.</div>
+                        </div>
+                    </div>
+                    @*email*@
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-2 col-form-label text-center">Email</label>
+                        <div class="col-sm-6">
+                            <input type="email" class="form-control" name="Email" required
+                                   ng-disabled="!frmAddAcc.LastName.$valid"
+                                   ng-model="newAcc.Email"
+                                   ng-keyup="CheckEmail(newAcc.Email)"
+                                   placeholder="Nhập email...">
+                        </div>
+                        <div class="col-sm-1" ng-hide="!emailNew">
+                            <i class="fa fa-check text-success"></i>
+                        </div>
+                        <div class="col-sm-3 text-danger" ng-hide="!frmAddAcc.LastName.$valid">
+                            <div ng-hide="frmAddAcc.Email.$valid">Email thiếu &#64; hoặc nhập ký tự sai.</div>
+                            <div ng-hide="emailNew">Email đã được đăng ký.</div>
+                        </div>
+                    </div>
+                    @*pass*@
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-2 col-form-label text-center">Mật khẩu</label>
+                        <div class="col-sm-6">
+                            <input type="password" class="form-control" ng-disabled="!frmAddAcc.Email.$valid" name="Pass" ng-model="newAcc.Pasword" placeholder="Nhập mật khẩu ..." required ng-minlength="6" ng-maxlength="50">
+                        </div>
+                        <div class="col-sm-1" ng-hide="!frmAddAcc.Pass.$valid">
+                            <i class="fa fa-check text-success"></i>
+                        </div>
+                        <div class="col-sm-4 text-danger" ng-hide="!frmAddAcc.Email.$valid">
+                            <div ng-hide="!frmAddAcc.Pass.$error.required ">Không được để trống..</div>
+                            <div ng-hide="!frmAddAcc.Pass.$error.minlength">Mật khẩu quá ngắn.</div>
+                            <div ng-hide="!frmAddAcc.Pass.$error.maxlength">Mật khẩu quá dài.</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-2 col-form-label text-center">Nhập lại mật khẩu</label>
+                        <div class="col-sm-6">
+                            <input type="password" class="form-control" name="Pass2" ng-disabled="!frmAddAcc.Email.$valid" ng-model="Pasword2" placeholder="Nhập lại mật khẩu ..." required>
+                        </div>
+
+                        <div class="col-sm-3 text-danger" ng-hide="!frmAddAcc.Pass.$valid">
+                            <div ng-hide="newAcc.Pasword==Pasword2">Xác nhận mật khẩu sai..</div>
+                            <div ng-hide="!(newAcc.Pasword==Pasword2)"><i class="fa fa-check text-success"></i></div>
+                        </div>
+                    </div>
+                    @*loại tài khoản*@
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-2 col-form-label text-center">Loại tài khoản</label>
+                        <div class="col-sm-6">
+                            <select ng-model="newAcc.TypeAcc" ng-change="CheckType(newAcc.TypeAcc)" name="type" required">
+                                <option ng-model="tests" ng-repeat="group in dataGroupUser" value="{{group.ID}}">{{group.NameType}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4 text-danger">
+                            <div ng-hide="checkTypeAcc">Chọn loại tài khoản.</div>
+                            <div ng-hide="!checkTypeAcc"><i class="fa fa-check text-success"></i></div>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-5" ng-switch="(frmAddAcc.$valid && checkTypeAcc &&(newAcc.Pasword==Pasword2))">
+                        <button class="btn btn-primary col-sm-3" ng-switch-when="true" ng-click="AddNewAcc(newAcc)">Tạo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <h4 class="text-center">Danh Mục</h4>
+            </div>
+            <div class="panel-body">
+                <div class="list-group">
+                    <button class="list-group-item" ng-click="User()">Tài khoản của bạn</button>
+                    <button class="list-group-item" ng-click="AllAcc()">Danh sách tài khoản</button>
+                    <button class="list-group-item" ng-click="AddAcc()">Thêm tài khoản</button>
+                    <div class=" list-group-item" ng-hide="SearchHide">
+                        <p>Tìm kiếm:</p>
+                        <input class="form-control" ng-model="seachrAcc" type="search" placeholder="Tìm kiếm" aria-label="Search">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

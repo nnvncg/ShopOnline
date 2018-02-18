@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewBag.Title = "Danh sách các tình trạng của hóa đơn";
+    Layout = "~/Views/layout/_LayoutAdmin.cshtml";
+}
+<div class="row-fluid" ng-controller="BillStatus" ng-cloak>
+    <div id="sample-table-2_wrapper" style="overflow-x:scroll" class="dataTables_wrapper" role="grid">
+        <div class="input-group custom-search-form col-sm-4 col-2 d-inline">
+
+            <input type="text" class="form-control" ng-model="searchInput" placeholder="Search...">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button">
+                    <i class="fa fa-search"></i>
+                </button>
+            </span>
+        </div>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" style="width:4%">#</th>
+                    <th scope="col">Tên</th>
+                    <th scope="col">Thông tin</th>
+                    <th scope="col">Ngày tạo</th>
+                    <th scope="col">Người tạo</th>
+                    <th scope="col">
+                        <button class="btn btn-link"ng-click="ModalAdd()" ng-hide="CheckAutAdd" data-toggle="modal" data-target="#exampleModal-99" title="Thêm mới menu">Thêm mới</button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="n in dataStatus|filter:searchInput|range:(selectedPage-1)*pageSize|limitTo:pageSize">
+                <tr>
+                    <th scope="row">{{(selectedPage-1)*pageSize + $index +1}}</th>
+                    <td>{{n.NameStatusBill.substring(0,30)}}</td>
+                    <td>{{n.InformationStatus}}</td>
+                    <td>{{n.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</td>
+                    <td ng-repeat="acc in accountAll| filter:{ 'ID':  n.Creator}:true">{{acc.FirstName}} {{acc.LastName}}</td>
+                    <td class="d-inline">
+                        <button class="fa fa-pencil-square-o btn btn-outline-success" ng-hide="CheckAutEdit" aria-hidden="true" ng-click="EditModal(n.ID)" title="Sửa menu" data-toggle="modal" data-target="#exampleModal-99"></button>
+                        &nbsp;
+                        <button class="fa fa-trash-o btn btn-outline-success" ng-hide="CheckAutDelete" ng-click="ModalDelete(n.ID)" aria-hidden="true" title="Xóa Menu." data-toggle="modal" data-target="#exampleModal-99"></button>
+                    </td>
+                </tr>
+
+            </tbody>
+            <tr class="float-right d-inline">
+                <td colspan="5" class="ml-5">
+                    <a class="btn btn-light" ng-class="PagePrevActive()" ng-click="goToPrev()"><small><<<</small></a>
+                    <a class="btn btn-info" ng-class="PageActive($index+1)" ng-repeat="n in data=(dataStatus|pageCount:pageSize)" ng-click="toPage($index+1)">{{$index+1}}</a>
+                    <a class="btn btn-light" ng-class="PageNextActive()" ng-click="goToNext()"><small>>>></small></a>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="modal fade" id="exampleModal-99" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title" ng-hide="EditHide" id="exampleModalLabel">SỬA TÌNH TRẠNG {{StatusDeleteData.NameStatusBill}}</h4>
+                    <h4 class="modal-title" ng-hide="DeleteHide" id="exampleModalLabel">XÓA TÌNH TRẠNG</h4>
+                    <h4 class="modal-title" ng-hide="AddHide" id="exampleModalLabel">
+                        THÊM MENU MỚI
+                        
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @*xoa*@
+                <div class="modal-body" ng-hide="DeleteHide">
+                    Bạn có chắc chắn muốn xóa trạng thái: {{StatusDeleteData.NameStatusBill}}
+                </div>
+                @*them*@
+                <div class="modal-body" ng-hide="AddHide">
+                    <form name="formAdd">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Tên tình trạng</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="StatusName" ng-model="StatusName" ng-keyup="test()" class="form-control" ng-minlength="5" placeholder="...">
+                            </div>
+                            <div class="col-sm-3" ng-if="!formAdd.StatusName.$valid">
+                                <small class="form-text text-muted text-danger"> Tên cần dài hơn 5</small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Thông tin</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="StatusInf" ng-keyup="test()" ng-model="StatusInf" class="form-control" ng-minlength="5" placeholder="...">
+                            </div>
+                            <div class="col-sm-3" ng-if="!formAdd.StatusInf.$valid">
+                                <small class="form-text text-muted text-danger">Tên cần dài hơn 5.</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                @*sua*@
+                <div class="modal-body" ng-hide="EditHide">
+                    <form name="formEdit">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Tên tình trạng</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="StatusName" ng-model="StatusDeleteData.NameStatusBill" ng-keyup="testEdit()" class="form-control" ng-minlength="5" placeholder="...">
+                            </div>
+                            <div class="col-sm-3" ng-if="!formEdit.StatusName.$valid">
+                                <small class="form-text text-muted text-danger"> Tên cần dài hơn 5</small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Thông tin</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="StatusInf" ng-keyup="testEdit()" ng-model="StatusDeleteData.InformationStatus" class="form-control" ng-minlength="5" placeholder="...">
+                            </div>
+                            <div class="col-sm-3" ng-if="!formEdit.StatusInf.$valid">
+                                <small class="form-text text-muted text-danger">Tên cần dài hơn 5.</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Thoát</button>
+                    <button type="button" ng-disabled="TestEditStatus" class="btn btn-primary" ng-hide="EditHide" ng-click="EditStatus()" data-dismiss="modal" aria-label="Close">Lưu thay đổi</button>
+                    <button type="button" ng-disabled="TestStatus" class="btn btn-primary" ng-hide="AddHide" ng-click="AddStatus()" data-dismiss="modal" aria-label="Close">Lưu thay đổi</button>
+                    <button type="button" class="btn btn-primary" ng-hide="DeleteHide" ng-click="RemoveStatus(StatusDeleteData.ID)" data-dismiss="modal" aria-label="Close">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

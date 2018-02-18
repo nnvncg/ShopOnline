@@ -1,0 +1,240 @@
+﻿
+@{
+    ViewBag.Title = "Danh sách sản phẩm";
+    Layout = "~/Views/layout/_LayoutAdmin.cshtml";
+}
+<div class="row-fluid" ng-controller="ProductAdmin" ng-cloak>
+    <div id="sample-table-2_wrapper" style="overflow-x:scroll" class="dataTables_wrapper" role="grid">
+        <div class="input-group custom-search-form col-sm-4 col-2 d-inline">
+            <input type="text" class="form-control" ng-model="searchInput" placeholder="Search...">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button">
+                    <i class="fa fa-search"></i>
+                </button>
+            </span>
+        </div>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" style="width:4%">#</th>
+                    <th scope="col">Tên</th>
+                    <th scope="col">Hình ảnh</th>
+                    <th scope="col">Nguồn gốc</th>
+                    <th scope="col">Hạn sử dụng</th>
+                    <th scope="col">Số lượng tồn</th>
+                    <th scope="col">Giá</th>
+                    <th scope="col">
+                        <button class="btn btn-link" ng-click="AddProduct()"  ng-hide="CheckAutAdd" data-toggle="modal" data-target=".bd-example-modal-lg" title="Thêm mới sản phẩm">Thêm mới</button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="n in dataProductNew|filter:searchInput|range:(selectedPage-1)*pageSize|limitTo:pageSize">
+                <tr>
+                    <th scope="row">{{(selectedPage-1)*pageSize + $index +1}}</th>
+                    <td>{{n.ProductName}}</td>
+                    <td style="width:10%"><img ng-src="{{n.Image}}" style="width:70%" /></td>
+                    <td>{{n.Source.substring(0,50)}}...</td>
+                    <td>{{n.ShelfLife.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</td>
+                    <td style="width:10%">{{n.Quantity}}</td>
+                    <td>{{n.Price| currency:"":0}} VND</td>
+                    <td class="d-inline">
+                        <button class="fa fa-info btn  btn-outline-success" ng-click="DetailProductAd(n.ID)" aria-hidden="true" title="Xem thông tin chi tiết." data-toggle="modal" data-target=".bd-example-modal-lg"></button>&nbsp;
+                        <button class="fa fa-pencil-square-o btn btn-outline-success"  ng-hide="CheckAutEdit" aria-hidden="true" ng-click="EditProductAd(n.ID)" title="Sửa sản phẩm" data-toggle="modal" data-target=".bd-example-modal-lg"></button>&nbsp;
+                        <button class="fa fa-trash-o btn btn-outline-success"  ng-hide="CheckAutDelete" ng-click="DeleteProductAd(n.ID)" aria-hidden="true" title="Xóa sản phẩm." data-toggle="modal" data-target=".bd-example-modal-lg"></button>
+                    </td>
+                </tr>
+
+            </tbody>
+            <tr class="float-right d-inline">
+                <td colspan="5" class="ml-5">
+                    <a class="btn btn-light" ng-class="PagePrevActive()" ng-click="goToPrev()"><small><<<</small></a>
+                    <a class="btn btn-info" ng-class="PageActive($index+1)" ng-repeat="n in data=(dataProductNew|pageCount:pageSize)" ng-click="toPage($index+1)">{{$index+1}}</a>
+                    <a class="btn btn-light" ng-class="PageNextActive()" ng-click="goToNext()"><small>>>></small></a>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    @*edit*@
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" ng-hide="AddHide">Thêm sản phẩm mới</h4>
+                    <h4 class="modal-title" ng-hide="DetailHide">{{ProductDetail1.ProductName| uppercase}}</h4>
+                    <h4 class="modal-title" ng-hide="EditHide">{{ProductDetail.ProductName| uppercase}}</h4>
+                    <h4 class="modal-title" ng-hide="DeleteHide">{{ProductDetail.ProductName| uppercase}}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="Clear()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @*modal add*@
+                <div class="modal-body pre-scrollable animate-show-hide" ng-hide="AddHide">
+                    @*@using (Html.BeginForm("AddProduct", "ProductAdmin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()*@
+
+                        <div class="form-group form-inline">
+                            <label class=" col-md-3">Tên sản phẩm</label>
+                            <input name="ProductName" type="text" pattern=".{5,}"ng-model="DataNew.ProductName" title="san phamphai5 ky tu tro len" class="form-control" placeholder="Tên sản phẩm...">
+                        </div>
+                        <div class="form-group form-inline">
+                            <label class=" col-md-3">Loại sản phẩm</label>
+                            <select name="Category" ng-model="DataNew.Category" class="form-control">
+                                <option ng-repeat="ca in Category" value="{{ca.ID}}">{{ca.NameCategory}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group form-inline">
+                            <label class=" col-md-3">Chi tiết sản phẩm</label>
+                            @*<textarea name="Detail"></textarea>*@
+                            <div class=" col-md-8" ckeditor="options" name="Detail" ng-model="DataNew.Detail" ready="onReady()"></div>
+
+                        </div>
+                        <div class="form-group form-inline">
+                            <label class=" col-md-3">Nguồn gốc</label>
+                            <input type="text" class="form-control" ng-model="DataNew.Source" name="Source">
+                        </div>
+                        <div class="form-group form-inline">
+                            <label class=" col-md-3">Giới thiệu nguồn gốc</label>
+                            @*<textarea name="SourceDetail"></textarea>*@
+                            <div class=" col-md-8" ckeditor="options" name="SourceDetail" ng-model="DataNew.SourceDetail" ready="onReady()"></div>
+
+                        </div>
+                        <div class="form-group form-inline">
+                            <label class="col-md-3 col-sm-3">Ngày hết hạn</label>
+                            <input type="datetime-local" ng-model="DataNew.ShelfLife" name="ShelfLife" class="form-control">
+                        </div>
+                        <div class="form-group form-inline">
+                            <label class="col-md-3 col-sm-3">Số lượng</label>
+                            <input type="number" class="form-control" ng-model="DataNew.Quantity" name="Quantity" min="1" value="1">
+                        </div>
+                        <div class="form-group form-inline">
+                            <label class=" col-md-3 col-sm-3">Hình ảnh</label>
+                            <div class="modal-body col-sm-9">
+                                @*<input id="uploadFile" type="file" name="Image" accept=".png,.jpg" class="img" />*@
+                                <input type="file" ngf-select ng-model="NewImg" name="file"
+                                       accept="image/*" ngf-max-size="2MB" required
+                                       ngf-model-invalid="errorFile" class="col-sm-4">
+                                <img ng-show="file.$valid" ngf-thumbnail="NewImg" class="thumb col-sm-8">
+
+                            </div>
+                        </div>
+                        <div class="form-group form-inline">
+                            <label class=" col-md-3 col-sm-3">Giá</label>
+                            <input type="text" class="form-control" name="Price" ng-model="DataNew.Price" value="000">  VND
+                        </div>
+                        <button type="submit" id="AddProduct" ng-click="AddProduct1(DataNew,NewImg)" data-dismiss="modal" class="btn btn-primary">Thêm</button>
+                    
+                </div>
+                @*Hien thi modal sửa*@
+                <div class="modal-body pre-scrollable animate-show-hide" ng-hide="EditHide">
+                    <input name="ID" hidden type="number" value="{{ProductDetail.ID}}" />
+                    <div class="form-group form-inline">
+                        <label class=" col-md-3">Tên sản phẩm</label>
+                        <input name="ProductName" type="text" class="form-control" placeholder="Tên sản phẩm..." ng-model="ProductDetail.ProductName">
+                    </div>
+                    <div class="form-group form-inline">
+                        <label class=" col-md-3">Loại sản phẩm</label>
+                        <select name="Category" class="form-control" ng-model="ProductDetail.Category">
+                            <option ng-repeat="ca in Category" value="{{ca.ID}}">{{ca.NameCategory}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group form-inline col-sm-12">
+                        <label>Chi tiết sản phẩm</label>
+                        @*<textarea name="Detail" ng-model="ProductDetail.Detail"></textarea>*@
+                        <div class=" col-md-8" ckeditor="options" name="SourceDetail" ng-model="ProductDetail.Detail" ready="onReady()"></div>
+
+                    </div>
+                    <div class="form-group form-inline">
+                        <label class=" col-md-3">Nguồn gốc</label>
+                        <input type="text" class="form-control" name="Source" ng-model="ProductDetail.Source">
+                    </div>
+                    <div class="form-group form-inline col-sm-12">
+                        <label>Giới thiệu nguồn gốc</label>
+                        @*<textarea name="SourceDetail" ng-model="ProductDetail.SourceDetail"></textarea>*@
+                        <div class=" col-md-8" ckeditor="options" name="SourceDetail" ng-model="ProductDetail.SourceDetail" ready="onReady()"></div>
+
+                    </div>
+                    <div class="form-group form-inline">
+                        <label class="col-md-3 col-sm-3">Ngày hết hạn</label>
+                        <input type="datetime-local" name="ShelfLife" class="form-control">
+                    </div>
+                    <div class="form-group form-inline">
+                        <label class="col-md-3 col-sm-3">Số lượng</label>
+                        <input type="number" class="form-control" name="Quantity" min="1" ng-model="ProductDetail.Quantity">
+                    </div>
+                    @*<div class="form-group form-inline">
+                        <label class=" col-md-3 col-sm-3">Hình ảnh</label>
+                        <div class="modal-body">
+                            <input id="uploadFile" type="file" name="fileImage" accept=".png,.jpg" class="img" />
+                        </div>
+                    </div>*@
+                    <div class="form-group form-inline">
+                        <label class=" col-md-3 col-sm-3">Hình ảnh</label>
+                        <div class="modal-body col-sm-9">
+                            @*<input id="uploadFile" type="file" name="Image" accept=".png,.jpg" class="img" />*@
+                            <input type="file" ngf-select ng-model="ImgEdit" name="file"
+                                   accept="image/*" ngf-max-size="2MB" required
+                                   ngf-model-invalid="errorFile" class="col-sm-4">
+                            <img ng-show="file.$valid" ngf-thumbnail="ImgEdit" class="thumb col-sm-8">
+
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label class=" col-md-3 col-sm-3">Giá</label>
+                        <input type="text" class="form-control" name="Price" ng-model="ProductDetail.Price">VND
+                    </div>
+                    <div class="form-group form-inline">
+                        <label class=" col-md-3 col-sm-3">Kích hoạt</label>
+                        <button name="Active" class="btn btn-link" ng-click="ChangeActive(ProductDetail.ID)">
+                            {{ProductDetail.Active|status}}
+                        </button>
+                    </div>
+                    <button type="submit" id="EditProduct" class="btn btn-primary"  data-dismiss="modal" ng-click="EditProduct1(ProductDetail,ImgEdit)">Sửa</button>
+
+                </div>
+
+
+                @*Hien thi modal xóa*@
+
+                <div class="modal-body pre-scrollable animate-show-hide" ng-hide="DeleteHide">
+                    <h4> Bạn có chắc chắn muốn xóa sản phẩm này!!</h4>
+                </div>
+
+                @*Hien thi modal chi tiết*@
+
+                <div class="modal-body pre-scrollable animate-show-hide" ng-hide="DetailHide" style="min-height: 450px">
+                    <img ng-src="{{ProductDetail1.Image}}" class="img-fluid text-center" alt="item.ProductName" style="width: 90%">
+                    <h5>Giới thiệu sản phẩm: </h5>
+                    <p ng-bind-html="ProductDetail.Detail"></p>
+                    <hr />
+                    <p>Nhóm sản phẩm: {{nameCategory}}</p>
+                    <hr />
+                    <p class="">Số lượng còn lại : {{ProductDetail1.Quantity}} </p>
+                    <hr />
+                    <p class="">Hạn sử dụng : {{ProductDetail1.ShelfLife.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}} </p>
+                    <hr />
+                    <p>
+                        Giá: {{ProductDetail1.Price| currency:"":0}} VND
+                    </p>
+                    <hr />
+                    <h5>Nguồn gốc sản phẩm phẩm: </h5>
+                    {{ProductDetail1.Source}}
+                    <hr />
+                    <h5>Giới thiệu về nguồn gốc sản phẩm phẩm: </h5>
+                    <p ng-bind-html="ProductDetail1.SourceDetail"></p>
+                    <hr />
+                    <p>Ngày đăng : {{ProductDetail1.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</p>
+                    <hr />
+                    <p>Người đăng : {{creator}}</p>
+                    <hr />
+                    <p>Tình trạng kích hoạt : {{ProductDetail1.Active|status}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="ApplyDelete(ProductDetail.ID)" ng-hide="AppyInProduct" data-dismiss="modal">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="Clear()">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

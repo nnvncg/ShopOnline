@@ -1,0 +1,60 @@
+﻿@model ShopAuto.Models.Bill
+
+@{
+    ViewBag.Title = "Đơn hàng";
+    Layout = "~/Views/layout/_LayoutCustomer.cshtml";
+}
+
+
+<div class="bg-faded p-4 my-4" id="MonAn">
+    <hr class="divider">
+    <h2 class="text-center text-lg text-uppercase my-0">
+        Đơn <strong>Hàng</strong>
+    </h2>
+    <hr class="divider">
+    <div class="row" ng-controller="OrderController" ng-cloak>
+        <div class="col-md-4">
+            <p></p>
+            <form name="frmSearch" ng-submit="FindOrder2()" class=" form-inline" >
+                <input type="search" name="myInput" class="form-control col-md-7" placeholder="Nhập mã hóa đơn ..." ng-model="keyWord" />
+                <input class="btn btn-outline-success" type="submit" value="Gửi"data-toggle="tooltip" data-placement="left" title="Tìm kiếm hóa đơn"/>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <h5 class="text-primary">{{message}}</h5>
+            <div class="list-group ng-{{hide}}" style="box-shadow: 5px 3px 5px #708090">
+                <button type="button" class="list-group-item list-group-item-action active">
+                    Hóa đơn số {{myData.TradingCode}}
+                </button>
+                <button type="button" class="list-group-item list-group-item-action" disabled>Tổng tiền: {{myData.TotalMoney}}</button>                             
+                <button type="button" class="list-group-item list-group-item-action" disabled>Tình trạng: {{tatus.NameStatusBill}}</button>
+                <button type="button" class="list-group-item list-group-item-action" disabled>Ngày đặt: {{myData.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</button>
+                <button type="button" class="list-group-item list-group-item-action" disabled>Người đặt: {{myData.Creator}}</button>
+                <button type="button" class="list-group-item list-group-item-action" ng-click="BillDetail()"data-toggle="tooltip" data-placement="left" title="Chi tiết hóa đơn này!">Xem Chi Tiết</button>
+            </div>
+        </div>
+        <div class="col-md-4 ng-{{dl}}">
+            <h5 class="text-primary">Chi tiết hóa đơn</h5>
+            <table class="table " style="box-shadow: 5px 3px 5px #708090">
+                <thead>
+                    <tr class="alert alert-primary">
+                        <th scope="col" class=" border border-info">#</th>
+                        <th scope="col" class=" border border-info">Mặt hàng</th>
+                        <th scope="col" class=" border border-info">Số lượng</th>
+                        <th scope="col" class=" border border-info">Giá</th>
+                    </tr>
+                </thead>
+                <tbody ng-repeat="n in dataBillDetail">
+                    <tr>
+                        <th scope="row" class=" border border-info">{{ $index + 1 }}</th>
+                        <td class=" border border-info">{{Product[$index]}}</td>
+                        <td class=" border border-info">{{n.Quantity}}</td>
+                        <td class=" border border-info">{{n.Price}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
