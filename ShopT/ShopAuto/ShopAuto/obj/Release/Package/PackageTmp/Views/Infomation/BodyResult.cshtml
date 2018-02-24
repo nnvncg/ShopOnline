@@ -1,0 +1,15 @@
+﻿@using ShopAuto.Models
+@model List<ShopInformation>
+
+
+@foreach (var item in Model)
+{
+    <div class="text-center mt-4">
+        <div class="text-heading text-lg">
+            <p>Welcome To</p></div>
+        <h2 class="my-2">@item.NameShop</h2>
+        <div class="text-heading text-lg">
+            <p>By <strong>@item.NameShop</strong></p>
+        </div>
+    </div>
+}

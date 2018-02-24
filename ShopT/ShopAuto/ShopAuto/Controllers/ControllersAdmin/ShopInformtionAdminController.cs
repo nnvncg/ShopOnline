@@ -19,16 +19,54 @@ namespace ShopAuto.Controllers.ControllersAdmin
             }
             else
             {
-                return View();
+                int _id = Convert.ToInt32(Session["IDAccAdmin"].ToString());
+                int _userType = _db.Users.FirstOrDefault(n => n.ID == _id).TypeAcc;
+                UserGroup _gr = _db.UserGroups.FirstOrDefault(n => n.ID == _userType);
+                if (_gr.Authorities.Contains("-17-") || _gr.Authorities.Contains("-1-"))
+                {
+                    return View();
+                }
+                return Redirect("~/Page/404/index.html");
+
             }
         }
         public ActionResult MapGoogle()
         {
-            return View();
+            if (Session["EmailAdmin"] == null)
+            {
+                return Redirect("/AccountAdmin/Login");
+            }
+            else
+            {
+                int _id = Convert.ToInt32(Session["IDAccAdmin"].ToString());
+                int _userType = _db.Users.FirstOrDefault(n => n.ID == _id).TypeAcc;
+                UserGroup _gr = _db.UserGroups.FirstOrDefault(n => n.ID == _userType);
+                if (_gr.Authorities.Contains("-17-") || _gr.Authorities.Contains("-1-"))
+                {
+                    return View();
+                }
+                return Redirect("~/Page/404/index.html");
+
+            }
         }
         public ActionResult MetaKey()
         {
-            return View();
+            if (Session["EmailAdmin"] == null)
+            {
+                return Redirect("/AccountAdmin/Login");
+            }
+            else
+            {
+                int _id = Convert.ToInt32(Session["IDAccAdmin"].ToString());
+                int _userType = _db.Users.FirstOrDefault(n => n.ID == _id).TypeAcc;
+                UserGroup _gr = _db.UserGroups.FirstOrDefault(n => n.ID == _userType);
+                if (_gr.Authorities.Contains("-17-") || _gr.Authorities.Contains("-1-"))
+                {
+                    return View();
+                }
+                return Redirect("~/Page/404/index.html");
+
+            }
         }
         public JsonResult DataInformation()
         {
@@ -67,12 +105,13 @@ namespace ShopAuto.Controllers.ControllersAdmin
             _db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult Edit2(string phone, string phone2, string email,string bankAcc)
+        public JsonResult Edit2(string phone, string phone2, string email,string bankAcc,string password)
         {
             ShopInformation data = _db.ShopInformations.FirstOrDefault(n => n.ID == 1);
             data.Phone = phone;
             data.Phone2= phone;
             data.Email= email;
+            data.PassWordEmail = password;
             data.BankAcc= bankAcc;
             _db.Entry(data).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();

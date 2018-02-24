@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    @Html.Action("TitleResult", "Infomation")
     <title>@ViewBag.Title</title>
 
     <!-- Bootstrap Core CSS -->
@@ -30,7 +30,7 @@
 
 </head>
 
-<body ng-app="myApp">
+<body ng-app="myApp" ng-cloak>
 
     <div id="wrapper">
 
@@ -55,7 +55,7 @@
             </ul>
             <!-- /.navbar-top-links -->
 
-            <div class="navbar-default sidebar" role="navigation">
+            <div class="navbar-default sidebar" role="navigation" ng-controller="Layout">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li class="sidebar-search">
@@ -79,31 +79,31 @@
                                     <a href="@Url.Action("Account","AccountAdmin")">Thông tin tài khoản</a>
 
                                 </li>
-                                <li>
+                                <li ng-hide="CheckAutViewGroup">
                                     <a href="@Url.Action("UserGroup","GroupUser")">Nhóm tài khoản</a>
                                 </li>
                             </ul>
                         </li>
-                        <li>
+                        <li ng-hide="CheckAutViewContact">
                             <a href="@Url.Action("Contact","ContactAdmin")"><i class="fa fa-table fa-fw"></i>Liên hệ</a>
                         </li>
-                        <li>
+                        <li ng-hide="CheckAutViewProd">
                             <a href="@Url.Action("AllProduct","ProductAdmin")"><i class="fa fa-table fa-fw"></i> Sản phẩm</a>
                         </li>
-                        <li>
+                        <li ng-hide="CheckAutViewMenu">
                             <a href="@Url.Action("Index","MenuAdmin")"><i class="fa fa-table fa-fw"></i> Menu</a>
                         </li>
                         <li>
                             <a href="@Url.Action("Index","CategoryAdmin")"><i class="fa fa-table fa-fw"></i> Loại sản phẩm</a>
                         </li>
-                        <li>
-                            <a href="@Url.Action("Comment","CommentAdmin")"><i class="fa fa-table fa-fw"></i> Quản lý bình luận</a>
+                        <li ng-hide="CheckAutViewCmt">
+                            <a href="@Url.Action("Comment","CommentAdmin")"><i class="fa fa-table fa-fw" ></i> Quản lý bình luận</a>
                         </li>
-                        <li>
+                        <li ng-hide="CheckAutViewSlider">
                             <a href="@Url.Action("Slider","SliderAdmin")"><i class="fa fa-table fa-fw"></i> Quản lý trình chiếu</a>
                         </li>
 
-                        <li>
+                        <li ng-hide="CheckAutViewInfWeb">
                             <a href="#"><i class="fa fa-table fa-fw"></i>Thông tin Website</a>
                             <ul class="nav nav-second-level">
                                 <li>

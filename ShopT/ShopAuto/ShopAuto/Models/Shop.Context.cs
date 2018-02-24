@@ -30,15 +30,18 @@ namespace ShopAuto.Models
         public virtual DbSet<BillDetail> BillDetails { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<MenuList> MenuLists { get; set; }
-        public virtual DbSet<ShopInformation> ShopInformations { get; set; }
-        public virtual DbSet<Bill> Bills { get; set; }
         public virtual DbSet<StatusBill> StatusBills { get; set; }
         public virtual DbSet<Slider> Sliders { get; set; }
         public virtual DbSet<Contact> Contacts { get; set; }
         public virtual DbSet<Decentralization> Decentralizations { get; set; }
-        public virtual DbSet<UserGroup> UserGroups { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<devvn_quanhuyen> devvn_quanhuyen { get; set; }
+        public virtual DbSet<devvn_tinhthanhpho> devvn_tinhthanhpho { get; set; }
+        public virtual DbSet<devvn_xaphuongthitran> devvn_xaphuongthitran { get; set; }
+        public virtual DbSet<Bill> Bills { get; set; }
+        public virtual DbSet<UserGroup> UserGroups { get; set; }
+        public virtual DbSet<ShopInformation> ShopInformations { get; set; }
     }
 }

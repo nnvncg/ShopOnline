@@ -5,15 +5,16 @@
 
 }
 
-<div class="container d-flex align-items-center" ng-controller="LogInAdmin">
+<div class="container d-flex align-items-center" ng-controller="LogInAdmin" ng-cloak>
     <div class="form-holder">
-        <div class="row"> 
+        <div class="row">
             <div class="col-sm-6 bg-info rounded-left ">
                 <br />
                 <br />
                 <h2 class="text-center">Tên nhà hàng</h2>
             </div>
-            <div class="col-sm-6 bg-white">
+            @*Frm tên đăng nhập*@
+            <div class="col-sm-6 bg-white" ng-hide="frmLogin">
                 <br />
                 <br />
                 <h2 class="text-center">Đăng nhập</h2>
@@ -27,14 +28,61 @@
                         <input type="password" class="form-control" ng-enter="LogIn(EmailLogIn,PassLogIn)" name="passWord" ng-model="PassLogIn" placeholder="Mật khẩu của bạn">
                     </div>
                     <div class="form-check ml-3">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Nhớ mật khẩu</label>
+                        <button class="btn btn-link" ng-click="ToForgetPassW()">Quên mật khẩu..</button>
                     </div>
                     <button type="submit" class="btn btn-primary" ng-click="LogIn(EmailLogIn,PassLogIn)">Đăng nhập</button>
                 </form>
                 <br />
             </div>
+            @*Frm quên mật khẩu*@
+            <div class="col-sm-6 bg-white" ng-hide="frmForgetPassW">
+                <br />
+                <br />
+                <h2 class="text-center"ng-hide="SendCode1">Gửi mã xác nhận</h2>
+                <h2 class="text-center"ng-hide="inputCode">Nhập mã xác nhận</h2>
+                <form class="col-sm-10 ml-5" name="frmForgetPassW2">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Địa chỉ Email</label>
+                        <input type="email" class="form-control" name="email" required ng-model="EmailSend" aria-describedby="emailHelp" placeholder="Nhập email"/>
+                    </div>
+                    <div class="form-group" ng-hide="inputCode">
+                        <label>Mã xác nhận</label>
+                        <input type="text" class="form-control" required ng-minlength="5" ng-disabled="inputCode" ng-model="CodeReset" placeholder="Nhập mã xác nhận"/>
+                    </div>
+                    <div class="form-check ml-3">
+                        <button class="btn btn-link" ng-click="ToLogin()">Về đăng nhập..</button>
+                        <button class="btn btn-link" ng-click="ToInputCode()" ng-hide="SendCode1">Đã có mã xác nhận..</button>
+                        <button class="btn btn-link" ng-click="ToSendCode()" ng-hide="inputCode">Gửi lại mã..</button>
+                    </div>
+                    <button type="button" class="btn btn-primary" ng-hide="SendCode1" ng-disabled="frmForgetPassW2.email.$invalid" ng-click="SendCode(EmailSend)">Gửi mã</button>
+                    <button type="button" class="btn btn-primary" ng-hide="inputCode" ng-disabled="frmForgetPassW2.$invalid" ng-click="CheckCode(EmailSend,CodeReset)">Xác nhận</button>
+                </form>
+                <br />
+            </div>
+            <div class="col-sm-6 bg-white" ng-hide="frmResetPassW">
+                <br />
+                <br />
+                <h2 class="text-center">Đổi mật khẩu</h2>
+                <form class="col-sm-10 ml-5" name="frmResetPassW1">
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Mật khẩu mới</label>
+                        <input type="password" class="form-control" name="passWord" required ng-minlength="6" ng-maxlength="100" ng-model="PassWordNew" placeholder="Mật khẩu của bạn">
+                        <label class="text-danger" ng-hide="!frmResetPassW1.passWord.$error.minlength">Mật khẩu quá ngắn</label>
+                        <label class="text-danger" ng-hide="!frmResetPassW1.passWord.$error.maxlength">Mật khẩu quá dài</label>
 
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Xác nhận mật khẩu</label>
+                        <input type="password" class="form-control" required ng-enter="" name="passWord2" ng-model="PassWordNew2" placeholder="Nhập lại mật khẩu">
+                        <label class="text-danger" ng-hide="PassWordNew2==PassWordNew">Xác nhận mật khẩu sai!!</label>
+                    </div>
+                    <div class="form-check ml-3">
+                        <button class="btn btn-link" ng-click="ToLogin()">Về đăng nhập..</button>
+                    </div>
+                    <button type="submit" class="btn btn-primary" ng-disabled="PassWordNew2!=PassWordNew" ng-hide="frmResetPassW1.passWord.$invalid" ng-click="ResetPasssWord(EmailSend,PassWordNew)">Xác nhận</button>
+                </form>
+                <br />
+            </div>
         </div>
     </div>
 </div>

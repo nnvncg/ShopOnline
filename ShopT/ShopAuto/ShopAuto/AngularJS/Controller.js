@@ -12,6 +12,133 @@ myCntr.controller("SliderCustomer2", function ($scope, $http) {
         $scope.Check = false;
     }
 });
+myCntr.controller("resetPass", function ($scope, $http, $notify) {
+    $scope.resetPassword = true;
+    $scope.Login = false;
+    $scope.resetP = true;
+
+    $scope.CheckResetPass = function () {
+        $scope.resetPassword = false;
+        $scope.Login = true;
+        $scope.SendCode1 = false;
+        $scope.Code = true;
+    }
+    $scope.CheckLogin = function () {
+        $scope.resetPassword = true;
+        $scope.Login = false;
+    }
+    $scope.CheckCode = function () {
+        $scope.SendCode1 = true;
+        $scope.Code = false;
+    }
+    $scope.SendEmail1 = function () {
+        $scope.SendCode1 = false;
+        $scope.Code = true;
+    }
+    $scope.SendCode = function (email) {
+        $http(
+            {
+                method: "POST",
+                url: "/Accounts/SendCodeResetPass",
+                dataType: 'json',
+                data: { email: email },
+                headers: { "Content-Type": "application/json" }
+            }).then(function (response) {
+                if (response.data == 2) {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.success('Gửi mã xác nhận', 'Gửi mã xác nhận thành công!');
+                    $scope.SendCode1 = true;
+                    $scope.Code = false;
+                    $scope.EmailReset = '';
+                }
+                if (response.data == 1) {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.error('Gửi mã xác nhận', 'Email sai!');
+                    $scope.EmailReset = '';
+                }
+                if (response.data == 3) {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.error('Gửi mã xác nhận', 'Gửi mã xác nhận thất bại!');
+                    $scope.EmailReset = '';
+                }
+            })
+    }
+    $scope.CheckCode2 = function (email, code) {
+        $http(
+            {
+                method: "POST",
+                url: "/Accounts/checkCode",
+                dataType: 'json',
+                data: {
+                    email: email,
+                    code: code
+                },
+                headers: { "Content-Type": "application/json" }
+            }).then(function (response) {
+                if (response.data == 2) {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.success('Xác nhận', 'Xác nhận thành công!');
+                    $scope.resetPassword = true;
+                    $scope.Login = true;
+                    $scope.resetP = false;
+                    $scope.CodeReset = '';
+                }
+                if (response.data == 1) {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.warning('Xác nhận', 'Email sai!');
+                    $scope.EmailReset = '';
+                    $scope.CodeReset = '';
+
+                }
+                if (response.data == 3) {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.error('Xác nhận', 'Xác nhận thất bại!');
+                    $scope.CodeReset = '';
+                    $scope.EmailReset = '';
+                }
+            })
+    }
+    $scope.ResetPass = function (email, pass) {
+        $http(
+            {
+                method: "POST",
+                url: "/Accounts/ResetPass",
+                dataType: 'json',
+                data: {
+                    email: email,
+                    pass: pass
+                },
+                headers: { "Content-Type": "application/json" }
+            }).then(function (response) {
+                if (response.data) {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.success('Đổi mật khẩu', 'Đổi mật khẩu thành công!');
+                    $scope.resetPassword = true;
+                    $scope.Login = false;
+                    $scope.resetP = true;
+                    $scope.EmailReset = '';
+                    $scope.CodeReset = '';
+                    $scope.NewPass = '';
+                    $scope.NewPass2 = '';
+
+                }
+                else {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.error('Đổi mật khẩu', 'Đổi mật khẩu thất bại!');
+
+                }
+                
+            })
+    }
+});
 myCntr.controller("LayoutCustomer", function ($scope, $http, $notify) {
     $http(
         {
@@ -71,7 +198,7 @@ myCntr.controller("LayoutCustomer", function ($scope, $http, $notify) {
             return $scope.selectedPage == page ? 'btn-danger' : '';
         }
     }
-    $scope.AddComment = function (prod,cmm) {
+    $scope.AddComment = function (prod, cmm) {
         $http(
             {
                 method: "POST",
@@ -79,7 +206,7 @@ myCntr.controller("LayoutCustomer", function ($scope, $http, $notify) {
                 dataType: 'json',
                 data: {
                     idProd: prod,
-                    comment:cmm
+                    comment: cmm
                 },
                 headers: { "Content-Type": "application/json" }
             }).then(function (response) {
@@ -137,9 +264,42 @@ myCntr.controller("LayoutCustomer", function ($scope, $http, $notify) {
 });
 //Phần hóa đơn
 myCntr.controller("OrderController", function ($scope, $http) {
-    $scope.message = "Chưa có hóa đơn!";
-    $scope.hide = "hide";
-    $scope.dl = "hide";
+    account();
+    function account() {
+        $http(
+            {
+                method: "GET",
+                url: "/AccountAdmin/AllAccount"
+            }).then(function (response) {
+                $scope.accountAll = response.data;
+            })
+    }
+    GetAllStatus();
+    function GetAllStatus() {
+        $http(
+            {
+                method: "Get",
+                url: "/StatusBill/ListStatus"
+            }).then(function (response) {
+                if (response.data == "") {
+                    $scope.dataStatus = "";
+                }
+                else {
+                    $scope.message = "";
+                    $scope.dataStatus = response.data;
+                }
+            })
+    }
+    allProd();
+    function allProd() {
+        $http(
+            {
+                method: "Get",
+                url: "/ProductAdmin/ListProduct"
+            }).then(function (response) {
+                $scope.dataProd = response.data;
+            })
+    }
     $scope.FindOrder2 = function () {
         $http(
             {
@@ -157,74 +317,19 @@ myCntr.controller("OrderController", function ($scope, $http) {
                 else {
                     $scope.hide = "show";
                     $scope.myData = response.data;
-
                     $http(
                         {
                             method: "POST",
-                            url: "/Order/FindBillStatus",
+                            url: "/Order/FindBillDetail",
                             dataType: 'json',
-                            data: { id: $scope.myData.Status },
+                            data: { id: $scope.myData.ID},
                             headers: { "Content-Type": "application/json" }
-                        }).then(function (response_2) {
-                            $scope.tatus = response_2.data;
+                        }).then(function (res) {
+                            $scope.dataDetailBill = res.data;
                         })
-
-                    $scope.message = "Hóa Đơn";
-
-                    $scope.BillDetail = function () {
-                        $http(
-                            {
-                                method: "POST",
-                                url: "/Order/FindBillDetail",
-                                dataType: 'json',
-                                data: { id: $scope.myData.ID },
-                                headers: { "Content-Type": "application/json" }
-                            }).then(function (response_3) {
-                                $scope.dl = "show";
-                                $scope.dataBillDetail = response_3.data;
-                                var arr = new Array();
-                                var arr1 = $scope.dataBillDetail;
-
-                                for (var i = 0; i < arr1.length; i++) {
-                                    var arr2 = $scope.dataBillDetail[i];
-                                    $http(
-                                        {
-                                            method: "POST",
-                                            url: "/Order/ProductByBill",
-                                            dataType: 'json',
-                                            data: { id: arr2.IdProduct },
-                                            headers: { "Content-Type": "application/json" }
-                                        }).then(function (response_4) {
-                                            arr.push(response_4.data.ProductName);
-                                        })
-                                }
-                                $scope.Product = arr;
-                            })
-                    };
                 }
             });
     }
-    $scope.MessageCm = ""
-    $scope.PostComment = function () {
-        var arrCm =
-            {
-                Comment1: $scope.Content,
-                Name: $scope.Name,
-                Image: $scope.Image,
-                Product: $scope.Product2
-            };
-        $http(
-            {
-                method: "POST",
-                url: "/Comment/AddComment",
-                dataType: 'json',
-                data: arrCm,
-                headers: { "Content-Type": "application/json" }
-            }).then(function (response) {
-                $scope.MessageCm = response.data;
-            })
-    }
-
 });
 
 //hóa đơn trong account
@@ -389,7 +494,7 @@ myCntr.controller("Cart", function ($scope, $http, $notify, $window) {
                 }
             });
     }
-    
+
     function totalMoney() {
         $http(
             {
@@ -529,12 +634,118 @@ myCntr.controller("Cart", function ($scope, $http, $notify, $window) {
                                 $scope.myData2 = null;
                             }
                             else {
-                                
+
                                 $scope.Message = "hide";
                                 $scope.table = "show";
                                 $scope.myData2 = response.data;
                             }
                         })
+                }
+            })
+    }
+    //đặt hàng
+    $scope.AddOrder = function (Email, Name, Phone, Xa_Phuong, Note) {
+        $http(
+            {
+                method: "POST",
+                url: "/Order/AddOrder",
+                dataType: 'json',
+                data: {
+                    email: Email,
+                    name: Name,
+                    phone: Phone,
+                    addess: Xa_Phuong,
+                    note: Note
+                },
+                headers: { "Content-Type": "application/json" }
+            }).then(function (response) {
+                if (response.data) {
+                    $http(
+                        {
+                            method: "Get",
+                            url: "/Order/GetCart"
+                        }).then(function (response) {
+                            if (response.data === "") {
+                                $scope.Hide = "hide";
+                                $scope.Message = "show";
+                                $scope.table = "hide";
+                            }
+                            else {
+                                $scope.myData2 = response.data;
+                                totalMoney();
+                            }
+                        })
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.success('Đặt hàng', 'Đặt hàng thành công!');
+                }
+                else {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.error('Đặt hàng', 'Đặt hàng thất bại!');
+                }
+            })
+    }
+    //tài khoản hiện tại
+    $http(
+        {
+            method: "Get",
+            url: "/Accounts/UserLogin"
+        }).then(function (response) {
+            if (!response.data) {
+                dataUserLogIn = "";
+            }
+            else {
+                dataUserLogIn = response.data;
+                $scope.Email = dataUserLogIn.Email;
+                $scope.Name = dataUserLogIn.FirstName + ' ' + dataUserLogIn.LastName;
+                $scope.Phone = dataUserLogIn.Phone;
+            }
+
+        })
+    //chon quan huyen thanh pho
+    $http(
+        {
+            method: "Get",
+            url: "/Order/Tinh_ThanhPho"
+        }).then(function (response) {
+            $scope.dataThanhPho = response.data;
+        })
+    $scope.CheckQuanHuyen = function (matp) {
+        $http(
+            {
+                method: "POST",
+                url: "/Order/Quan_Huyen",
+                dataType: 'json',
+                data: {
+                    matp: matp
+                },
+                headers: { "Content-Type": "application/json" }
+            }).then(function (response) {
+                if (response.data == "") {
+                    $scope.dataQuanHuyen = null;
+                }
+                else {
+                    $scope.dataQuanHuyen = response.data;
+                }
+            })
+    }
+    $scope.CheckXaPhuong = function (maqh) {
+        $http(
+            {
+                method: "POST",
+                url: "/Order/Xa_Phuong",
+                dataType: 'json',
+                data: {
+                    maqh: maqh
+                },
+                headers: { "Content-Type": "application/json" }
+            }).then(function (response) {
+                if (response.data == "") {
+                    $scope.dataXaPhuong = null;
+                }
+                else {
+                    $scope.dataXaPhuong = response.data;
                 }
             })
     }

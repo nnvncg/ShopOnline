@@ -1,0 +1,189 @@
+﻿
+@{
+    ViewBag.Title = "Chi tiết tài khoản " + ViewBag.Name;
+    Layout = "~/Views/layout/_LayoutAdmin.cshtml";
+}
+
+@using ShopAuto.Models
+@model User
+
+<div class="row-fluid" ng-controller="AccountDetail" ng-cloak>
+    <div id="sample-table-2_wrapper" style="overflow-x:scroll" class="dataTables_wrapper" role="grid">
+
+        <div class="panel panel-green col-sm-4">
+            <div class="panel panel-heading">
+                <h4 class="text-center">Thông tin chi tiết tài khoản</h4>
+            </div>
+            <div class="panel panel-body">
+                <div class="form-group row">
+                    <label for="staticEmail" class="col-sm-2 col-form-label">Tên</label>
+                    <div class="col-sm-10">
+                        @ViewBag.Name
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+                    @if (Model.Email.Length > 45)
+                    {
+                        <div class="col-sm-10">
+                            @Model.Email.Substring(0, 45) ...
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-sm-10">
+                            @Model.Email
+                        </div>
+                    }
+                </div>
+                <div class="form-group row">
+                    <label for="staticEmail" class="col-sm-2 col-form-label">Điện thoại</label>
+                    <div class="col-sm-10">
+                        @Model.Phone
+                    </div>
+                </div>
+                @*Modal chi tiết*@
+                <button type="button" ng-click="CheckDetail(@Model.ID)" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Xem thêm
+                </button>
+                <button class="btn btn-warning" ng-click="ViewOrder(@Model.ID)">Hóa đơn</button>
+                <button class="btn btn-warning" ng-click="ViewCmt(@Model.ID)" ng-disabled="CheckAutViewCmt">Bình luận</button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Chi tiết tài khoản</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-sm-2 col-form-label">Điạ chỉ</label>
+                                    <div class="col-sm-10">
+                                        {{dataUser.Addess}}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-sm-2 col-form-label">Ngày tạo</label>
+                                    <div class="col-sm-10">
+                                        {{dataUser.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-sm-2 col-form-label">Trạng thái</label>
+                                    <div class="col-sm-10">
+                                        <button ng-disabled="CheckAutActive" ng-click="ChangeActive(dataUser.ID)" class="btn btn-link">
+                                            {{dataUser.Active|status}}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-sm-2 col-form-label">Loại tài khoản</label>
+                                    <div class="col-sm-10">
+                                        <div class="col-sm-6" ng-switch="(dataUser.TypeAcc==1)">
+                                            <select ng-model="selectedTypeUser" class="form-control" ng-switch-when="false" ng-change="changeTypeUser(dataUser.ID,selectedTypeUser)" ng-disabled="CheckAutEditType">
+                                                <option value="" ng-repeat="group in dataGroupUser| filter:{ 'ID':  dataUser.TypeAcc}:true">{{group.NameType}}</option>
+                                                <option ng-model="tests" ng-repeat="group in dataGroupUser" value="{{group.ID}}">{{group.NameType}}</option>
+                                            </select>
+                                            <p ng-switch-when="true" ng-repeat="group in dataGroupUser| filter:{ 'ID':  dataUser.TypeAcc}:true">{{group.NameType}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-8 panel panel-green" ng-hide="HideViewOrder">
+            <h3 class="text-center panel-heading">Danh sách hóa đơn</h3>
+            <div class="panel-body">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col" style="width:4%">#</th>
+                            <th scope="col">Mã hóa đơn</th>
+                            <th scope="col">Tổng tiền</th>
+                            <th scope="col">Ngày tạo</th>
+                            <th scope="col">Đã xem</th>
+                            <th scope="col">Tình trạng</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="n in dataBill|range:(selectedPage-1)*pageSize|limitTo:pageSize">
+                        <tr>
+                            <th scope="row">{{(selectedPage-1)*pageSize + $index +1}}</th>
+                            <td>{{n.TradingCode}}</td>
+                            <td>{{n.TotalMoney| currency:"":0}} VND</td>
+                            <td>{{n.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</td>
+                            <td>{{n.Seen|seen}}</td>
+                            <td ng-repeat="sts in dataStatus|filter:{ 'ID':  n.Status}:true">{{sts.NameStatusBill}}</td>
+                        </tr>
+
+                    </tbody>
+                    <tr class="float-right d-inline">
+                        <td colspan="5" class="ml-5">
+                            <a class="btn btn-light" ng-class="PagePrevActive()" ng-click="goToPrev()"><small><<<</small></a>
+                            <a class="btn btn-info" ng-class="PageActive($index+1)" ng-repeat="n in data=(dataBill|pageCount:pageSize)" ng-click="toPage($index+1)">{{$index+1}}</a>
+                            <a class="btn btn-light" ng-class="PageNextActive()" ng-click="goToNext()"><small>>>></small></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-8 panel panel-green" ng-hide="HideViewCmt">
+            <h3 class="text-center panel-heading">Danh sách bình luận</h3>
+            <div class="panel-body">
+                <div class="col-sm-4 panel panel-yellow" ng-repeat="n in dataCmt|range:(selectedPage1-1)*pageSize1|limitTo:pageSize1">
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Sản phẩm</label>
+                        <p class="col-sm-7" ng-repeat="prod in dataProd|filter:{ 'ID':  n.Product}:true">{{prod.ProductName}}</p>
+
+                        <button ng-hide="CheckAutDelCmt" class="btn btn-link col-sm-1" data-toggle="modal" data-target=".bd-example-modal-sm-{{n.ID}}"><i class=" fa fa-close"></i></button>
+                        @*Modal xoa*@
+                        <div class="modal fade bd-example-modal-sm-{{n.ID}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="exampleModalLabel">Xác nhận xóa</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <button type="button" class="btn btn-primary"data-dismiss="modal" ng-click="RemoveCmt(n.ID)" >Xác nhận</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Không</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        @*  *@
+                    </div>
+                    <hr />
+                    <div class="form-group row">
+                        <label class="col-sm-6 col-form-label">Bình luận</label>
+                        <div class="col-sm-12">
+                            {{n.Comment1}}
+                        </div>
+                    </div>
+                    <div>
+                        <small class="col-sm-12 text-right">{{n.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</small>
+                    </div>
+
+                </div>
+                <div class="col-sm-12">
+                    <a class="btn btn-light" ng-class="PagePrevActive1()" ng-click="goToPrev1()"><small><<<</small></a>
+                    <a class="btn btn-info" ng-class="PageActive1($index+1)" ng-repeat="n in data1=(dataCmt|pageCount:pageSize1)" ng-click="toPage1($index+1)">{{$index+1}}</a>
+                    <a class="btn btn-light" ng-class="PageNextActive1()" ng-click="goToNext1()"><small>>>></small></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

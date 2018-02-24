@@ -22,14 +22,19 @@ namespace ShopAuto.Models
     
         public int ID { get; set; }
         public string TradingCode { get; set; }
+        public string Email { get; set; }
+        public string Name { get; set; }
+        public string Phone { get; set; }
         public Nullable<double> TotalMoney { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<bool> Seen { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<int> Creator { get; set; }
+        public string Addess { get; set; }
+        public string Note { get; set; }
     
+        public virtual StatusBill StatusBill { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BillDetail> BillDetails { get; set; }
-        public virtual StatusBill StatusBill { get; set; }
     }
 }

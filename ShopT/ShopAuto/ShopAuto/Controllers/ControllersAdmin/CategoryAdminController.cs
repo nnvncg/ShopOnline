@@ -20,6 +20,7 @@ namespace ShopAuto.Controllers.ControllersAdmin
             }
             else
             {
+                
                 return View();
             }
         }

@@ -8,7 +8,7 @@
         <div class="panel panel-green">
             <div class="panel-heading text-center" ng-hide="userHide">Thông tin tài khoản</div>
             <div class="panel-heading text-center" ng-hide="AllHide">Danh sách tài khoản</div>
-            <div class="panel-heading text-center" ng-hide="AddHide">Thêm tài khoản mới</div>
+            <div class="panel-heading text-center" ng-hide="AddHide" >Thêm tài khoản mới</div>
             <div class="panel-body" ng-hide="userHide">
                 <div class="list-group">
                     <div class="list-group-item col-sm-3">
@@ -32,22 +32,20 @@
                                                 <div class="form-group row">
                                                     <label for="staticEmail" class="col-sm-2 col-form-label text-center">Họ</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control" name="FirstName" ng-model="FirstName" placeholder="Nhập tên..." required ng-minlength="5" ng-maxlength="30">
+                                                        <input type="text" class="form-control" name="FirstName" ng-model="FirstName" placeholder="Nhập họ..." required ng-maxlength="30">
                                                     </div>
                                                     <div class="col-sm-4 text-danger">
                                                         <div ng-hide="!frmEditName.FirstName.$error.required">Không được để trống..</div>
-                                                        <div ng-hide="!frmEditName.FirstName.$error.minlength">Họ phải dài hơn 5 kí tự</div>
                                                         <div ng-hide="!frmEditName.FirstName.$error.maxlength">Họ quá dài.</div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="inputPassword" class="col-sm-2 col-form-label text-center">Tên</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control" name="Name" ng-model="LastName" placeholder="Nhập tên..." required ng-minlength="5" ng-maxlength="30">
+                                                        <input type="text" class="form-control" name="Name" ng-model="LastName" placeholder="Nhập tên..." required ng-maxlength="30">
                                                     </div>
                                                     <div class="col-sm-4 text-danger">
                                                         <div ng-hide="!frmEditName.Name.$error.required">Không được để trống..</div>
-                                                        <div ng-hide="!frmEditName.Name.$error.minlength">Tên phải dài hơn 5 kí tự</div>
                                                         <div ng-hide="!frmEditName.Name.$error.maxlength">Tên quá dài.</div>
                                                     </div>
                                                 </div>
@@ -133,8 +131,7 @@
                             </div>
                         </div>
                         <hr />
-                        <div class="d-inline">
-
+                        <div class="d-inline" >
                             <p class="col-sm-3"><strong>Loại tài khoản</strong></p>
                             <p class="col-sm-9" ng-repeat="group in dataGroupUser| filter:{ 'ID':  dataUser.TypeAcc}:true">{{group.NameType}}</p>
                         </div>
@@ -241,10 +238,12 @@
                                     <p>{{n.Phone}}</p>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group row"  ng-switch="n.Email.length>12">
                                 <p class="col-sm-4">Email</p>
                                 <div class="col-sm-6">
-                                    <p>{{n.Email}}</p>
+                                    <p ng-switch-when="false">{{n.Email}}</p>
+                                    <p ng-switch-when="true">{{n.Email.substring(0,12)}}...</p>
+
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -256,7 +255,7 @@
                             <div class="form-group row">
                                 <p class="col-sm-4">Trạng thái</p>
                                 <div class="col-sm-6">
-                                    <button class="btn btn-link" ng-click="ChangeActive2(n.ID)">{{n.Active|status}}</button>
+                                    <button class="btn btn-link" ng-click="ChangeActive2(n.ID)" ng-disabled="CheckAutActive">{{n.Active|status}}</button>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -267,12 +266,12 @@
                             </div>
                             <div class="form-group row">
                                 <p class="col-sm-4">Loại </p>
-                                <div class="col-sm-6">
-
-                                    <select ng-model="selectedTypeUser" ng-change="changeTypeUser(n.ID,selectedTypeUser)">
+                                <div class="col-sm-6" ng-switch="n.TypeAcc==1">
+                                    <select ng-model="selectedTypeUser" ng-switch-when="false" ng-change="changeTypeUser(n.ID,selectedTypeUser)" ng-disabled="CheckAutEditType">
                                         <option value="" ng-repeat="group in dataGroupUser| filter:{ 'ID':  n.TypeAcc}:true">{{group.NameType}}</option>
                                         <option ng-model="tests" ng-repeat="group in dataGroupUser" value="{{group.ID}}">{{group.NameType}}</option>
                                     </select>
+                                    <p ng-switch-when="true" ng-repeat="group in dataGroupUser| filter:{ 'ID':  n.TypeAcc}:true">{{group.NameType}}</p>
                                 </div>
                             </div>
                         </div>
@@ -381,8 +380,8 @@
             <div class="panel-body">
                 <div class="list-group">
                     <button class="list-group-item" ng-click="User()">Tài khoản của bạn</button>
-                    <button class="list-group-item" ng-click="AllAcc()">Danh sách tài khoản</button>
-                    <button class="list-group-item" ng-click="AddAcc()">Thêm tài khoản</button>
+                    <button class="list-group-item" ng-click="AllAcc()"  ng-hide="CheckAutViewList" ng-disabled="CheckAutViewList">Danh sách tài khoản</button>
+                    <button class="list-group-item" ng-click="AddAcc()" ng-disabled="CheckAutAdd" ng-hide="CheckAutAdd">Thêm tài khoản</button>
                     <div class=" list-group-item" ng-hide="SearchHide">
                         <p>Tìm kiếm:</p>
                         <input class="form-control" ng-model="seachrAcc" type="search" placeholder="Tìm kiếm" aria-label="Search">

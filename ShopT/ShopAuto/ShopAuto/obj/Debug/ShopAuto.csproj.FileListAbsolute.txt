@@ -6,8 +6,6 @@ D:\ShopT\ShopAuto\ShopAuto\bin\EntityFramework.dll
 D:\ShopT\ShopAuto\ShopAuto\bin\EntityFramework.SqlServer.dll
 D:\ShopT\ShopAuto\ShopAuto\bin\Microsoft.Web.Infrastructure.dll
 D:\ShopT\ShopAuto\ShopAuto\bin\Newtonsoft.Json.dll
-D:\ShopT\ShopAuto\ShopAuto\bin\PagedList.dll
-D:\ShopT\ShopAuto\ShopAuto\bin\PagedList.Mvc.dll
 D:\ShopT\ShopAuto\ShopAuto\bin\System.Web.Helpers.dll
 D:\ShopT\ShopAuto\ShopAuto\bin\System.Web.Mvc.dll
 D:\ShopT\ShopAuto\ShopAuto\bin\System.Web.Optimization.dll
@@ -20,8 +18,6 @@ D:\ShopT\ShopAuto\ShopAuto\bin\Antlr3.Runtime.pdb
 D:\ShopT\ShopAuto\ShopAuto\bin\EntityFramework.xml
 D:\ShopT\ShopAuto\ShopAuto\bin\EntityFramework.SqlServer.xml
 D:\ShopT\ShopAuto\ShopAuto\bin\Newtonsoft.Json.xml
-D:\ShopT\ShopAuto\ShopAuto\bin\PagedList.xml
-D:\ShopT\ShopAuto\ShopAuto\bin\PagedList.Mvc.xml
 D:\ShopT\ShopAuto\ShopAuto\bin\System.Web.Helpers.xml
 D:\ShopT\ShopAuto\ShopAuto\bin\System.Web.Mvc.xml
 D:\ShopT\ShopAuto\ShopAuto\bin\System.Web.Optimization.xml
@@ -32,4 +28,3 @@ D:\ShopT\ShopAuto\ShopAuto\bin\System.Web.WebPages.Razor.xml
 D:\ShopT\ShopAuto\ShopAuto\obj\Debug\ShopAuto.csproj.CoreCompileInputs.cache
 D:\ShopT\ShopAuto\ShopAuto\obj\Debug\ShopAuto.dll
 D:\ShopT\ShopAuto\ShopAuto\obj\Debug\ShopAuto.pdb
-D:\ShopT\ShopAuto\ShopAuto\obj\Debug\ShopAuto.csprojResolveAssemblyReference.cache

@@ -22,7 +22,15 @@ namespace ShopAuto.Controllers.ControllersAdmin
             }
             else
             {
-                return View();
+                int _id = Convert.ToInt32(Session["IDAccAdmin"].ToString());
+                int _userType = _db.Users.FirstOrDefault(n => n.ID == _id).TypeAcc;
+                UserGroup _gr = _db.UserGroups.FirstOrDefault(n => n.ID == _userType);
+                if (_gr.Authorities.Contains("-32-") || _gr.Authorities.Contains("-1-"))
+                {
+                    return View();
+                }
+                return Redirect("~/Page/404/index.html");
+
             }
         }
         public JsonResult ListSlider()

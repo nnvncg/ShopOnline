@@ -35,7 +35,7 @@
                     <td>{{n.URLMenu}}</td>
                     <td style="width:10%">{{n.Order}}</td>
                     <td>{{n.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</td>
-                    <td ng-repeat="acc in accountAll| filter:{ 'ID':  n.Creator}:true">{{acc.FirstName}} {{acc.LastName}}</td>
+                    <td ng-repeat="acc in accountAll| filter:{ 'ID':  n.Creator}:true"><button ng-disabled="CheckAutViewDetailAcc"  class="btn btn-link" ng-click="ViewAccount(n.Creator)"> {{acc.FirstName}} {{acc.LastName}}</button></td>
                     <td class="d-inline">
 
                         <button class="fa fa-pencil-square-o btn btn-outline-success" ng-hide="CheckAutEdit" aria-hidden="true" ng-click="EditMenu(n.ID)" title="Sửa menu" data-toggle="modal" data-target="#exampleModal-99"></button>

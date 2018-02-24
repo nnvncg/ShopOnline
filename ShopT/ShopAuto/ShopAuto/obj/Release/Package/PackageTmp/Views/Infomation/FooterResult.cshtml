@@ -1,0 +1,28 @@
+﻿@using ShopAuto.Models
+@model List<ShopInformation>
+
+
+@foreach (var item in Model)
+{
+    <div class="bg-faded p-4 my-4 " id="ThongTinNhaHang">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card mt-2" style="width: auto; height: 30rem">
+                    <h4 class="card-header text-center text-secondary">Địa chỉ</h4>
+                    <iframe src="@item.URLMap" min-width="500" height="500" frameborder="0" style="border: 0;"></iframe>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card mt-2" style="width: auto;">
+                    <h3 class=" card-header text-center text-secondary">Thông tin liên hệ</h3>
+                    <p class="card-text ml-2">
+                        Địa chỉ: @item.AddressShop
+                    </p>
+                    <p class="card-text ml-2">
+                        Điện thoại: @item.Phone - @item.Phone2
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+}

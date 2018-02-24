@@ -22,7 +22,7 @@ namespace ShopAuto.Models
         public string Image { get; set; }
         public string Password { get; set; }
         public string Addess { get; set; }
-        public Nullable<int> TypeAcc { get; set; }
+        public int TypeAcc { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<bool> Active { get; set; }
         public Nullable<int> CodeReset { get; set; }

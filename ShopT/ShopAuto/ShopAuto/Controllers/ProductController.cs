@@ -4,8 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ShopAuto.Models;
-using PagedList;
-using PagedList.Mvc;
+
 namespace ShopAuto.Controllers
 {
     public class ProductController : Controller

@@ -32,7 +32,7 @@
                     <th scope="row">{{(selectedPage-1)*pageSize + $index +1}}</th>
                     <td>{{n.NameCategory}}</td>
                     <td class="col-sm-3" ng-bind-html="n.Detail.substring(0,50)"></td>
-                    <td ng-repeat="acc in accountAll| filter:{ 'ID':  n.Creator}:true">{{acc.FirstName}} {{acc.LastName}}</td>
+                    <td ng-repeat="acc in accountAll| filter:{ 'ID':  n.Creator}:true"><button ng-disabled="CheckAutViewDetailAcc" class="btn btn-link" ng-click="ViewAccount(n.Creator)"> {{acc.FirstName}} {{acc.LastName}}</button></td>
                     <td>
                         <a ng-hide="CheckAutEdit" ng-click="checkStatus(n.ID)">{{n.Active|status}}</a>
                         <p ng-hide="!CheckAutEdit">{{n.Active|status}}</p>

@@ -226,7 +226,7 @@
                     <hr />
                     <p>Ngày đăng : {{ProductDetail1.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</p>
                     <hr />
-                    <p>Người đăng : {{creator}}</p>
+                    <p>Người đăng : <button class="btn btn-link" ng-disabled="CheckAutViewDetailAcc"  ng-click="ViewAccount(ProductDetail1.Creator)">{{creator}}</button> </p>
                     <hr />
                     <p>Tình trạng kích hoạt : {{ProductDetail1.Active|status}}</p>
                 </div>

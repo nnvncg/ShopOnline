@@ -10,12 +10,17 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TradingCode" Type="nchar" MaxLength="10" />
+          <Property Name="TradingCode" Type="nchar" MaxLength="20" />
+          <Property Name="Email" Type="nchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" />
+          <Property Name="Phone" Type="nchar" MaxLength="11" />
           <Property Name="TotalMoney" Type="float" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="Seen" Type="bit" />
           <Property Name="Status" Type="int" />
           <Property Name="Creator" Type="int" />
+          <Property Name="Addess" Type="nvarchar" MaxLength="250" />
+          <Property Name="Note" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="BillDetail">
           <Key>
@@ -66,6 +71,32 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="500" />
         </EntityType>
+        <EntityType Name="devvn_quanhuyen">
+          <Key>
+            <PropertyRef Name="maqh" />
+          </Key>
+          <Property Name="maqh" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" />
+          <Property Name="type" Type="nvarchar" MaxLength="30" />
+          <Property Name="matp" Type="varchar" MaxLength="5" />
+        </EntityType>
+        <EntityType Name="devvn_tinhthanhpho">
+          <Key>
+            <PropertyRef Name="matp" />
+          </Key>
+          <Property Name="matp" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" />
+          <Property Name="type" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="devvn_xaphuongthitran">
+          <Key>
+            <PropertyRef Name="xaid" />
+          </Key>
+          <Property Name="xaid" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" />
+          <Property Name="type" Type="nvarchar" MaxLength="30" />
+          <Property Name="maqh" Type="varchar" MaxLength="5" />
+        </EntityType>
         <EntityType Name="MenuList">
           <Key>
             <PropertyRef Name="ID" />
@@ -105,10 +136,11 @@
           <Property Name="IconShop" Type="nvarchar" MaxLength="500" />
           <Property Name="AddressShop" Type="nvarchar" MaxLength="500" />
           <Property Name="About" Type="nvarchar(max)" />
-          <Property Name="Phone" Type="nchar" MaxLength="15" />
-          <Property Name="Phone2" Type="nchar" MaxLength="15" />
-          <Property Name="BankAcc" Type="nchar" MaxLength="50" />
-          <Property Name="Email" Type="nvarchar" MaxLength="500" />
+          <Property Name="Phone" Type="varchar" MaxLength="15" />
+          <Property Name="Phone2" Type="varchar" MaxLength="15" />
+          <Property Name="BankAcc" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="PassWordEmail" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="FaceBook" Type="nvarchar" MaxLength="500" />
           <Property Name="Google" Type="nvarchar" MaxLength="500" />
           <Property Name="Zalo" Type="nvarchar" MaxLength="500" />
@@ -151,7 +183,7 @@
           <Property Name="Image" Type="nvarchar" MaxLength="250" />
           <Property Name="Password" Type="nchar" MaxLength="50" />
           <Property Name="Addess" Type="nvarchar" MaxLength="500" />
-          <Property Name="TypeAcc" Type="int" />
+          <Property Name="TypeAcc" Type="int" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="Active" Type="bit" />
           <Property Name="CodeReset" Type="int" />
@@ -191,8 +223,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_devvn_quanhuyen_devvn_tinhthanhpho">
+          <End Role="devvn_tinhthanhpho" Type="Self.devvn_tinhthanhpho" Multiplicity="0..1" />
+          <End Role="devvn_quanhuyen" Type="Self.devvn_quanhuyen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="devvn_tinhthanhpho">
+              <PropertyRef Name="matp" />
+            </Principal>
+            <Dependent Role="devvn_quanhuyen">
+              <PropertyRef Name="matp" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_devvn_xaphuongthitran_devvn_quanhuyen">
+          <End Role="devvn_quanhuyen" Type="Self.devvn_quanhuyen" Multiplicity="0..1" />
+          <End Role="devvn_xaphuongthitran" Type="Self.devvn_xaphuongthitran" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="devvn_quanhuyen">
+              <PropertyRef Name="maqh" />
+            </Principal>
+            <Dependent Role="devvn_xaphuongthitran">
+              <PropertyRef Name="maqh" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_UserGroup">
-          <End Role="UserGroup" Type="Self.UserGroup" Multiplicity="0..1" />
+          <End Role="UserGroup" Type="Self.UserGroup" Multiplicity="1" />
           <End Role="User" Type="Self.User" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="UserGroup">
@@ -210,6 +266,9 @@
           <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Contact" EntityType="Self.Contact" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Decentralization" EntityType="Self.Decentralization" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="devvn_quanhuyen" EntityType="Self.devvn_quanhuyen" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="devvn_tinhthanhpho" EntityType="Self.devvn_tinhthanhpho" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="devvn_xaphuongthitran" EntityType="Self.devvn_xaphuongthitran" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MenuList" EntityType="Self.MenuList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShopInformation" EntityType="Self.ShopInformation" Schema="dbo" store:Type="Tables" />
@@ -224,6 +283,14 @@
           <AssociationSet Name="FK_BillDetail_Bill" Association="Self.FK_BillDetail_Bill">
             <End Role="Bill" EntitySet="Bill" />
             <End Role="BillDetail" EntitySet="BillDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_devvn_quanhuyen_devvn_tinhthanhpho" Association="Self.FK_devvn_quanhuyen_devvn_tinhthanhpho">
+            <End Role="devvn_tinhthanhpho" EntitySet="devvn_tinhthanhpho" />
+            <End Role="devvn_quanhuyen" EntitySet="devvn_quanhuyen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_devvn_xaphuongthitran_devvn_quanhuyen" Association="Self.FK_devvn_xaphuongthitran_devvn_quanhuyen">
+            <End Role="devvn_quanhuyen" EntitySet="devvn_quanhuyen" />
+            <End Role="devvn_xaphuongthitran" EntitySet="devvn_xaphuongthitran" />
           </AssociationSet>
           <AssociationSet Name="FK_User_UserGroup" Association="Self.FK_User_UserGroup">
             <End Role="UserGroup" EntitySet="UserGroup" />
@@ -266,78 +333,44 @@
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="Creator" Type="Int32" />
         </EntityType>
-        <EntityType Name="ShopInformation">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NameShop" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="IconShop" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="AddressShop" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="About" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
-          <Property Name="Phone2" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
-          <Property Name="BankAcc" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="FaceBook" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Google" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Zalo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="URLMap" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="Keywords" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityContainer Name="ShopOnlineEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="BillDetails" EntityType="Self.BillDetail" />
           <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="MenuLists" EntityType="Self.MenuList" />
-          <EntitySet Name="ShopInformations" EntityType="Self.ShopInformation" />
-          <EntitySet Name="Bills" EntityType="ShopOnlineModel.Bill" />
-          <AssociationSet Name="FK_BillDetail_Bill" Association="ShopOnlineModel.FK_BillDetail_Bill">
-            <End Role="Bill" EntitySet="Bills" />
-            <End Role="BillDetail" EntitySet="BillDetails" />
-          </AssociationSet>
           <EntitySet Name="StatusBills" EntityType="ShopOnlineModel.StatusBill" />
+          <EntitySet Name="Sliders" EntityType="ShopOnlineModel.Slider" />
+          <EntitySet Name="Contacts" EntityType="ShopOnlineModel.Contact" />
+          <EntitySet Name="Decentralizations" EntityType="ShopOnlineModel.Decentralization" />
+          <EntitySet Name="Products" EntityType="ShopOnlineModel.Product" />
+          <EntitySet Name="Users" EntityType="ShopOnlineModel.User" />
+          <EntitySet Name="Comments" EntityType="ShopOnlineModel.Comment" />
+          <EntitySet Name="devvn_quanhuyen" EntityType="ShopOnlineModel.devvn_quanhuyen" />
+          <EntitySet Name="devvn_tinhthanhpho" EntityType="ShopOnlineModel.devvn_tinhthanhpho" />
+          <EntitySet Name="devvn_xaphuongthitran" EntityType="ShopOnlineModel.devvn_xaphuongthitran" />
+          <AssociationSet Name="FK_devvn_quanhuyen_devvn_tinhthanhpho" Association="ShopOnlineModel.FK_devvn_quanhuyen_devvn_tinhthanhpho">
+            <End Role="devvn_tinhthanhpho" EntitySet="devvn_tinhthanhpho" />
+            <End Role="devvn_quanhuyen" EntitySet="devvn_quanhuyen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_devvn_xaphuongthitran_devvn_quanhuyen" Association="ShopOnlineModel.FK_devvn_xaphuongthitran_devvn_quanhuyen">
+            <End Role="devvn_quanhuyen" EntitySet="devvn_quanhuyen" />
+            <End Role="devvn_xaphuongthitran" EntitySet="devvn_xaphuongthitran" />
+          </AssociationSet>
+          <EntitySet Name="Bills" EntityType="ShopOnlineModel.Bill" />
           <AssociationSet Name="FK_Bill_StatusBill" Association="ShopOnlineModel.FK_Bill_StatusBill">
             <End Role="StatusBill" EntitySet="StatusBills" />
             <End Role="Bill" EntitySet="Bills" />
           </AssociationSet>
-          <EntitySet Name="Sliders" EntityType="ShopOnlineModel.Slider" />
-          <EntitySet Name="Contacts" EntityType="ShopOnlineModel.Contact" />
-          <EntitySet Name="Decentralizations" EntityType="ShopOnlineModel.Decentralization" />
+          <AssociationSet Name="FK_BillDetail_Bill" Association="ShopOnlineModel.FK_BillDetail_Bill">
+            <End Role="Bill" EntitySet="Bills" />
+            <End Role="BillDetail" EntitySet="BillDetails" />
+          </AssociationSet>
           <EntitySet Name="UserGroups" EntityType="ShopOnlineModel.UserGroup" />
-          <EntitySet Name="Products" EntityType="ShopOnlineModel.Product" />
-          <EntitySet Name="Users" EntityType="ShopOnlineModel.User" />
           <AssociationSet Name="FK_User_UserGroup" Association="ShopOnlineModel.FK_User_UserGroup">
             <End Role="UserGroup" EntitySet="UserGroups" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
-          <EntitySet Name="Comments" EntityType="ShopOnlineModel.Comment" />
+          <EntitySet Name="ShopInformations" EntityType="ShopOnlineModel.ShopInformation" />
         </EntityContainer>
-        <EntityType Name="Bill">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TradingCode" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="TotalMoney" Type="Double" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="Seen" Type="Boolean" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="Creator" Type="Int32" />
-          <NavigationProperty Name="BillDetails" Relationship="ShopOnlineModel.FK_BillDetail_Bill" FromRole="Bill" ToRole="BillDetail" />
-          <NavigationProperty Name="StatusBill" Relationship="ShopOnlineModel.FK_Bill_StatusBill" FromRole="Bill" ToRole="StatusBill" />
-        </EntityType>
-        <Association Name="FK_BillDetail_Bill">
-          <End Type="ShopOnlineModel.Bill" Role="Bill" Multiplicity="1" />
-          <End Type="ShopOnlineModel.BillDetail" Role="BillDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Bill">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="BillDetail">
-              <PropertyRef Name="IdBill" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="StatusBill">
           <Key>
             <PropertyRef Name="ID" />
@@ -349,18 +382,6 @@
           <Property Name="Creator" Type="Int32" />
           <NavigationProperty Name="Bills" Relationship="ShopOnlineModel.FK_Bill_StatusBill" FromRole="StatusBill" ToRole="Bill" />
         </EntityType>
-        <Association Name="FK_Bill_StatusBill">
-          <End Type="ShopOnlineModel.StatusBill" Role="StatusBill" Multiplicity="0..1" />
-          <End Type="ShopOnlineModel.Bill" Role="Bill" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="StatusBill">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Bill">
-              <PropertyRef Name="Status" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Slider">
           <Key>
             <PropertyRef Name="Id" />
@@ -393,18 +414,6 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="UserGroup">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NameType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Active" Type="Boolean" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="Creator" Type="Int32" />
-          <Property Name="Authorities" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="Users" Relationship="ShopOnlineModel.FK_User_UserGroup" FromRole="UserGroup" ToRole="User" />
-        </EntityType>
         <EntityType Name="Product">
           <Key>
             <PropertyRef Name="ID" />
@@ -436,24 +445,12 @@
           <Property Name="Image" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
           <Property Name="Addess" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="TypeAcc" Type="Int32" />
+          <Property Name="TypeAcc" Type="Int32" Nullable="false" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="Active" Type="Boolean" />
           <Property Name="CodeReset" Type="Int32" />
           <NavigationProperty Name="UserGroup" Relationship="ShopOnlineModel.FK_User_UserGroup" FromRole="User" ToRole="UserGroup" />
         </EntityType>
-        <Association Name="FK_User_UserGroup">
-          <End Type="ShopOnlineModel.UserGroup" Role="UserGroup" Multiplicity="0..1" />
-          <End Type="ShopOnlineModel.User" Role="User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserGroup">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="User">
-              <PropertyRef Name="TypeAcc" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Comment">
           <Key>
             <PropertyRef Name="ID" />
@@ -464,6 +461,147 @@
           <Property Name="Creator" Type="Int32" />
           <Property Name="Product" Type="Int32" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="devvn_quanhuyen">
+          <Key>
+            <PropertyRef Name="maqh" />
+          </Key>
+          <Property Name="maqh" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="matp" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="devvn_tinhthanhpho" Relationship="ShopOnlineModel.FK_devvn_quanhuyen_devvn_tinhthanhpho" FromRole="devvn_quanhuyen" ToRole="devvn_tinhthanhpho" />
+          <NavigationProperty Name="devvn_xaphuongthitran" Relationship="ShopOnlineModel.FK_devvn_xaphuongthitran_devvn_quanhuyen" FromRole="devvn_quanhuyen" ToRole="devvn_xaphuongthitran" />
+        </EntityType>
+        <EntityType Name="devvn_tinhthanhpho">
+          <Key>
+            <PropertyRef Name="matp" />
+          </Key>
+          <Property Name="matp" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="devvn_quanhuyen" Relationship="ShopOnlineModel.FK_devvn_quanhuyen_devvn_tinhthanhpho" FromRole="devvn_tinhthanhpho" ToRole="devvn_quanhuyen" />
+        </EntityType>
+        <EntityType Name="devvn_xaphuongthitran">
+          <Key>
+            <PropertyRef Name="xaid" />
+          </Key>
+          <Property Name="xaid" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="maqh" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="devvn_quanhuyen" Relationship="ShopOnlineModel.FK_devvn_xaphuongthitran_devvn_quanhuyen" FromRole="devvn_xaphuongthitran" ToRole="devvn_quanhuyen" />
+        </EntityType>
+        <Association Name="FK_devvn_quanhuyen_devvn_tinhthanhpho">
+          <End Type="ShopOnlineModel.devvn_tinhthanhpho" Role="devvn_tinhthanhpho" Multiplicity="0..1" />
+          <End Type="ShopOnlineModel.devvn_quanhuyen" Role="devvn_quanhuyen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="devvn_tinhthanhpho">
+              <PropertyRef Name="matp" />
+            </Principal>
+            <Dependent Role="devvn_quanhuyen">
+              <PropertyRef Name="matp" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_devvn_xaphuongthitran_devvn_quanhuyen">
+          <End Type="ShopOnlineModel.devvn_quanhuyen" Role="devvn_quanhuyen" Multiplicity="0..1" />
+          <End Type="ShopOnlineModel.devvn_xaphuongthitran" Role="devvn_xaphuongthitran" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="devvn_quanhuyen">
+              <PropertyRef Name="maqh" />
+            </Principal>
+            <Dependent Role="devvn_xaphuongthitran">
+              <PropertyRef Name="maqh" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Bill">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TradingCode" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="11" FixedLength="true" Unicode="true" />
+          <Property Name="TotalMoney" Type="Double" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="Seen" Type="Boolean" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="Creator" Type="Int32" />
+          <Property Name="Addess" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="StatusBill" Relationship="ShopOnlineModel.FK_Bill_StatusBill" FromRole="Bill" ToRole="StatusBill" />
+          <NavigationProperty Name="BillDetails" Relationship="ShopOnlineModel.FK_BillDetail_Bill" FromRole="Bill" ToRole="BillDetail" />
+        </EntityType>
+        <Association Name="FK_Bill_StatusBill">
+          <End Type="ShopOnlineModel.StatusBill" Role="StatusBill" Multiplicity="0..1" />
+          <End Type="ShopOnlineModel.Bill" Role="Bill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatusBill">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Bill">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BillDetail_Bill">
+          <End Type="ShopOnlineModel.Bill" Role="Bill" Multiplicity="1" />
+          <End Type="ShopOnlineModel.BillDetail" Role="BillDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bill">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BillDetail">
+              <PropertyRef Name="IdBill" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="UserGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="Creator" Type="Int32" />
+          <Property Name="Authorities" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="ShopOnlineModel.FK_User_UserGroup" FromRole="UserGroup" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_User_UserGroup">
+          <End Type="ShopOnlineModel.UserGroup" Role="UserGroup" Multiplicity="1" />
+          <End Type="ShopOnlineModel.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserGroup">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="TypeAcc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ShopInformation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameShop" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IconShop" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="AddressShop" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="About" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Phone2" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="BankAcc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="PassWordEmail" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="FaceBook" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Google" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Zalo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="URLMap" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Keywords" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -501,39 +639,6 @@
                 <ScalarProperty Name="Order" ColumnName="Order" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Creator" ColumnName="Creator" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ShopInformations">
-            <EntityTypeMapping TypeName="ShopOnlineModel.ShopInformation">
-              <MappingFragment StoreEntitySet="ShopInformation">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="NameShop" ColumnName="NameShop" />
-                <ScalarProperty Name="IconShop" ColumnName="IconShop" />
-                <ScalarProperty Name="AddressShop" ColumnName="AddressShop" />
-                <ScalarProperty Name="About" ColumnName="About" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
-                <ScalarProperty Name="BankAcc" ColumnName="BankAcc" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="FaceBook" ColumnName="FaceBook" />
-                <ScalarProperty Name="Google" ColumnName="Google" />
-                <ScalarProperty Name="Zalo" ColumnName="Zalo" />
-                <ScalarProperty Name="URLMap" ColumnName="URLMap" />
-                <ScalarProperty Name="Keywords" ColumnName="Keywords" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Bills">
-            <EntityTypeMapping TypeName="ShopOnlineModel.Bill">
-              <MappingFragment StoreEntitySet="Bill">
-                <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Seen" ColumnName="Seen" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="TotalMoney" ColumnName="TotalMoney" />
-                <ScalarProperty Name="TradingCode" ColumnName="TradingCode" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -579,18 +684,6 @@
             <EntityTypeMapping TypeName="ShopOnlineModel.Decentralization">
               <MappingFragment StoreEntitySet="Decentralization">
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserGroups">
-            <EntityTypeMapping TypeName="ShopOnlineModel.UserGroup">
-              <MappingFragment StoreEntitySet="UserGroup">
-                <ScalarProperty Name="Authorities" ColumnName="Authorities" />
-                <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="NameType" ColumnName="NameType" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -641,6 +734,86 @@
                 <ScalarProperty Name="Creator" ColumnName="Creator" />
                 <ScalarProperty Name="Seem" ColumnName="Seem" />
                 <ScalarProperty Name="Comment1" ColumnName="Comment" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="devvn_quanhuyen">
+            <EntityTypeMapping TypeName="ShopOnlineModel.devvn_quanhuyen">
+              <MappingFragment StoreEntitySet="devvn_quanhuyen">
+                <ScalarProperty Name="matp" ColumnName="matp" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="maqh" ColumnName="maqh" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="devvn_tinhthanhpho">
+            <EntityTypeMapping TypeName="ShopOnlineModel.devvn_tinhthanhpho">
+              <MappingFragment StoreEntitySet="devvn_tinhthanhpho">
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="matp" ColumnName="matp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="devvn_xaphuongthitran">
+            <EntityTypeMapping TypeName="ShopOnlineModel.devvn_xaphuongthitran">
+              <MappingFragment StoreEntitySet="devvn_xaphuongthitran">
+                <ScalarProperty Name="maqh" ColumnName="maqh" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="xaid" ColumnName="xaid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bills">
+            <EntityTypeMapping TypeName="ShopOnlineModel.Bill">
+              <MappingFragment StoreEntitySet="Bill">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Addess" ColumnName="Addess" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Seen" ColumnName="Seen" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="TotalMoney" ColumnName="TotalMoney" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="TradingCode" ColumnName="TradingCode" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserGroups">
+            <EntityTypeMapping TypeName="ShopOnlineModel.UserGroup">
+              <MappingFragment StoreEntitySet="UserGroup">
+                <ScalarProperty Name="Authorities" ColumnName="Authorities" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="NameType" ColumnName="NameType" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShopInformations">
+            <EntityTypeMapping TypeName="ShopOnlineModel.ShopInformation">
+              <MappingFragment StoreEntitySet="ShopInformation">
+                <ScalarProperty Name="Keywords" ColumnName="Keywords" />
+                <ScalarProperty Name="URLMap" ColumnName="URLMap" />
+                <ScalarProperty Name="Zalo" ColumnName="Zalo" />
+                <ScalarProperty Name="Google" ColumnName="Google" />
+                <ScalarProperty Name="FaceBook" ColumnName="FaceBook" />
+                <ScalarProperty Name="PassWordEmail" ColumnName="PassWordEmail" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="BankAcc" ColumnName="BankAcc" />
+                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="About" ColumnName="About" />
+                <ScalarProperty Name="AddressShop" ColumnName="AddressShop" />
+                <ScalarProperty Name="IconShop" ColumnName="IconShop" />
+                <ScalarProperty Name="NameShop" ColumnName="NameShop" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

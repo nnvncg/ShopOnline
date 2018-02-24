@@ -5,12 +5,17 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TradingCode" Type="nchar" MaxLength="10" />
+    <Property Name="TradingCode" Type="nchar" MaxLength="20" />
+    <Property Name="Email" Type="nchar" MaxLength="50" />
+    <Property Name="Name" Type="nvarchar" MaxLength="250" />
+    <Property Name="Phone" Type="nchar" MaxLength="11" />
     <Property Name="TotalMoney" Type="float" />
     <Property Name="CreateDate" Type="datetime" />
     <Property Name="Seen" Type="bit" />
     <Property Name="Status" Type="int" />
     <Property Name="Creator" Type="int" />
+    <Property Name="Addess" Type="nvarchar" MaxLength="250" />
+    <Property Name="Note" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="BillDetail">
     <Key>
@@ -61,6 +66,32 @@
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="500" />
   </EntityType>
+  <EntityType Name="devvn_quanhuyen">
+    <Key>
+      <PropertyRef Name="maqh" />
+    </Key>
+    <Property Name="maqh" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="100" />
+    <Property Name="type" Type="nvarchar" MaxLength="30" />
+    <Property Name="matp" Type="varchar" MaxLength="5" />
+  </EntityType>
+  <EntityType Name="devvn_tinhthanhpho">
+    <Key>
+      <PropertyRef Name="matp" />
+    </Key>
+    <Property Name="matp" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="100" />
+    <Property Name="type" Type="nvarchar" MaxLength="30" />
+  </EntityType>
+  <EntityType Name="devvn_xaphuongthitran">
+    <Key>
+      <PropertyRef Name="xaid" />
+    </Key>
+    <Property Name="xaid" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="100" />
+    <Property Name="type" Type="nvarchar" MaxLength="30" />
+    <Property Name="maqh" Type="varchar" MaxLength="5" />
+  </EntityType>
   <EntityType Name="MenuList">
     <Key>
       <PropertyRef Name="ID" />
@@ -100,10 +131,11 @@
     <Property Name="IconShop" Type="nvarchar" MaxLength="500" />
     <Property Name="AddressShop" Type="nvarchar" MaxLength="500" />
     <Property Name="About" Type="nvarchar(max)" />
-    <Property Name="Phone" Type="nchar" MaxLength="15" />
-    <Property Name="Phone2" Type="nchar" MaxLength="15" />
-    <Property Name="BankAcc" Type="nchar" MaxLength="50" />
-    <Property Name="Email" Type="nvarchar" MaxLength="500" />
+    <Property Name="Phone" Type="varchar" MaxLength="15" />
+    <Property Name="Phone2" Type="varchar" MaxLength="15" />
+    <Property Name="BankAcc" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="PassWordEmail" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="FaceBook" Type="nvarchar" MaxLength="500" />
     <Property Name="Google" Type="nvarchar" MaxLength="500" />
     <Property Name="Zalo" Type="nvarchar" MaxLength="500" />
@@ -146,7 +178,7 @@
     <Property Name="Image" Type="nvarchar" MaxLength="250" />
     <Property Name="Password" Type="nchar" MaxLength="50" />
     <Property Name="Addess" Type="nvarchar" MaxLength="500" />
-    <Property Name="TypeAcc" Type="int" />
+    <Property Name="TypeAcc" Type="int" Nullable="false" />
     <Property Name="CreateDate" Type="datetime" />
     <Property Name="Active" Type="bit" />
     <Property Name="CodeReset" Type="int" />
@@ -186,8 +218,32 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_devvn_quanhuyen_devvn_tinhthanhpho">
+    <End Role="devvn_tinhthanhpho" Type="Self.devvn_tinhthanhpho" Multiplicity="0..1" />
+    <End Role="devvn_quanhuyen" Type="Self.devvn_quanhuyen" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="devvn_tinhthanhpho">
+        <PropertyRef Name="matp" />
+      </Principal>
+      <Dependent Role="devvn_quanhuyen">
+        <PropertyRef Name="matp" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_devvn_xaphuongthitran_devvn_quanhuyen">
+    <End Role="devvn_quanhuyen" Type="Self.devvn_quanhuyen" Multiplicity="0..1" />
+    <End Role="devvn_xaphuongthitran" Type="Self.devvn_xaphuongthitran" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="devvn_quanhuyen">
+        <PropertyRef Name="maqh" />
+      </Principal>
+      <Dependent Role="devvn_xaphuongthitran">
+        <PropertyRef Name="maqh" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_User_UserGroup">
-    <End Role="UserGroup" Type="Self.UserGroup" Multiplicity="0..1" />
+    <End Role="UserGroup" Type="Self.UserGroup" Multiplicity="1" />
     <End Role="User" Type="Self.User" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="UserGroup">
@@ -205,6 +261,9 @@
     <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Contact" EntityType="Self.Contact" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Decentralization" EntityType="Self.Decentralization" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="devvn_quanhuyen" EntityType="Self.devvn_quanhuyen" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="devvn_tinhthanhpho" EntityType="Self.devvn_tinhthanhpho" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="devvn_xaphuongthitran" EntityType="Self.devvn_xaphuongthitran" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MenuList" EntityType="Self.MenuList" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ShopInformation" EntityType="Self.ShopInformation" Schema="dbo" store:Type="Tables" />
@@ -219,6 +278,14 @@
     <AssociationSet Name="FK_BillDetail_Bill" Association="Self.FK_BillDetail_Bill">
       <End Role="Bill" EntitySet="Bill" />
       <End Role="BillDetail" EntitySet="BillDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_devvn_quanhuyen_devvn_tinhthanhpho" Association="Self.FK_devvn_quanhuyen_devvn_tinhthanhpho">
+      <End Role="devvn_tinhthanhpho" EntitySet="devvn_tinhthanhpho" />
+      <End Role="devvn_quanhuyen" EntitySet="devvn_quanhuyen" />
+    </AssociationSet>
+    <AssociationSet Name="FK_devvn_xaphuongthitran_devvn_quanhuyen" Association="Self.FK_devvn_xaphuongthitran_devvn_quanhuyen">
+      <End Role="devvn_quanhuyen" EntitySet="devvn_quanhuyen" />
+      <End Role="devvn_xaphuongthitran" EntitySet="devvn_xaphuongthitran" />
     </AssociationSet>
     <AssociationSet Name="FK_User_UserGroup" Association="Self.FK_User_UserGroup">
       <End Role="UserGroup" EntitySet="UserGroup" />

@@ -34,39 +34,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ShopInformations">
-      <EntityTypeMapping TypeName="ShopOnlineModel.ShopInformation">
-        <MappingFragment StoreEntitySet="ShopInformation">
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="NameShop" ColumnName="NameShop" />
-          <ScalarProperty Name="IconShop" ColumnName="IconShop" />
-          <ScalarProperty Name="AddressShop" ColumnName="AddressShop" />
-          <ScalarProperty Name="About" ColumnName="About" />
-          <ScalarProperty Name="Phone" ColumnName="Phone" />
-          <ScalarProperty Name="Phone2" ColumnName="Phone2" />
-          <ScalarProperty Name="BankAcc" ColumnName="BankAcc" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="FaceBook" ColumnName="FaceBook" />
-          <ScalarProperty Name="Google" ColumnName="Google" />
-          <ScalarProperty Name="Zalo" ColumnName="Zalo" />
-          <ScalarProperty Name="URLMap" ColumnName="URLMap" />
-          <ScalarProperty Name="Keywords" ColumnName="Keywords" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Bills">
-      <EntityTypeMapping TypeName="ShopOnlineModel.Bill">
-        <MappingFragment StoreEntitySet="Bill">
-          <ScalarProperty Name="Creator" ColumnName="Creator" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="Seen" ColumnName="Seen" />
-          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-          <ScalarProperty Name="TotalMoney" ColumnName="TotalMoney" />
-          <ScalarProperty Name="TradingCode" ColumnName="TradingCode" />
-          <ScalarProperty Name="ID" ColumnName="ID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="StatusBills">
       <EntityTypeMapping TypeName="ShopOnlineModel.StatusBill">
         <MappingFragment StoreEntitySet="StatusBill">
@@ -109,18 +76,6 @@
       <EntityTypeMapping TypeName="ShopOnlineModel.Decentralization">
         <MappingFragment StoreEntitySet="Decentralization">
           <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="ID" ColumnName="ID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="UserGroups">
-      <EntityTypeMapping TypeName="ShopOnlineModel.UserGroup">
-        <MappingFragment StoreEntitySet="UserGroup">
-          <ScalarProperty Name="Authorities" ColumnName="Authorities" />
-          <ScalarProperty Name="Creator" ColumnName="Creator" />
-          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-          <ScalarProperty Name="Active" ColumnName="Active" />
-          <ScalarProperty Name="NameType" ColumnName="NameType" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -171,6 +126,86 @@
           <ScalarProperty Name="Creator" ColumnName="Creator" />
           <ScalarProperty Name="Seem" ColumnName="Seem" />
           <ScalarProperty Name="Comment1" ColumnName="Comment" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="devvn_quanhuyen">
+      <EntityTypeMapping TypeName="ShopOnlineModel.devvn_quanhuyen">
+        <MappingFragment StoreEntitySet="devvn_quanhuyen">
+          <ScalarProperty Name="matp" ColumnName="matp" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="maqh" ColumnName="maqh" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="devvn_tinhthanhpho">
+      <EntityTypeMapping TypeName="ShopOnlineModel.devvn_tinhthanhpho">
+        <MappingFragment StoreEntitySet="devvn_tinhthanhpho">
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="matp" ColumnName="matp" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="devvn_xaphuongthitran">
+      <EntityTypeMapping TypeName="ShopOnlineModel.devvn_xaphuongthitran">
+        <MappingFragment StoreEntitySet="devvn_xaphuongthitran">
+          <ScalarProperty Name="maqh" ColumnName="maqh" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="xaid" ColumnName="xaid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Bills">
+      <EntityTypeMapping TypeName="ShopOnlineModel.Bill">
+        <MappingFragment StoreEntitySet="Bill">
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="Addess" ColumnName="Addess" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Seen" ColumnName="Seen" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="TotalMoney" ColumnName="TotalMoney" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="TradingCode" ColumnName="TradingCode" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserGroups">
+      <EntityTypeMapping TypeName="ShopOnlineModel.UserGroup">
+        <MappingFragment StoreEntitySet="UserGroup">
+          <ScalarProperty Name="Authorities" ColumnName="Authorities" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="NameType" ColumnName="NameType" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ShopInformations">
+      <EntityTypeMapping TypeName="ShopOnlineModel.ShopInformation">
+        <MappingFragment StoreEntitySet="ShopInformation">
+          <ScalarProperty Name="Keywords" ColumnName="Keywords" />
+          <ScalarProperty Name="URLMap" ColumnName="URLMap" />
+          <ScalarProperty Name="Zalo" ColumnName="Zalo" />
+          <ScalarProperty Name="Google" ColumnName="Google" />
+          <ScalarProperty Name="FaceBook" ColumnName="FaceBook" />
+          <ScalarProperty Name="PassWordEmail" ColumnName="PassWordEmail" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="BankAcc" ColumnName="BankAcc" />
+          <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="About" ColumnName="About" />
+          <ScalarProperty Name="AddressShop" ColumnName="AddressShop" />
+          <ScalarProperty Name="IconShop" ColumnName="IconShop" />
+          <ScalarProperty Name="NameShop" ColumnName="NameShop" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>

@@ -5,40 +5,48 @@
 }
 <div class="row-fluid" ng-controller="ContactAdmin" ng-cloak>
     <div class="col-sm-3">
-        <div class="col-sm-12 mb-5" style="box-shadow:3px 3px 3px 3px #708090">
-            <h3 class="text-center bg-success">Tìm kiếm</h3>
-            <hr />
-            <form class="form-inline">
-                <input class="form-control" style="width:100%" type="search" placeholder="Nhập tên..." ng-model="search.Name" aria-label="Tìm kiếm...">
-            </form>
-            <br />
-            <hr />
-            <p>Ngày cần tìm</p> 
-            <ng-datepicker ng-model="date1" ng-change="checkDate()" first-week-day-sunday="true" style="max-width:100%" placeholder="Chọn ngày..">
-            </ng-datepicker>
-            <br />
-            <div class="form-group">
-                <button class="btn btn-link" ng-click="seen()">Chưa xem</button>
-                <button class="btn btn-link" ng-click="All()">Tất cả</button>
+        <div class="mb-5 panel panel-green" style="box-shadow:3px 3px 3px 3px #708090">
+            <div class="panel-heading">
+                <h3 class="text-center">Tìm kiếm</h3>
+            </div>
+            <div class="panel-body">
+                <hr />
+                <form class="form-inline">
+                    <input class="form-control" style="width:100%" type="search" placeholder="Nhập tên..." ng-model="search.Name" aria-label="Tìm kiếm...">
+                </form>
+                <hr />
+                <p>Ngày cần tìm</p>
+                <ng-datepicker ng-model="date1" ng-change="checkDate()" first-week-day-sunday="true" style="max-width:100%" placeholder="Chọn ngày..">
+                </ng-datepicker>
+                <br />
+                <div class="form-group">
+                    <button class="btn btn-link" ng-click="seen()">Chưa xem</button>
+                    <button class="btn btn-link" ng-click="All()">Tất cả</button>
+                </div>
             </div>
         </div>
 
     </div>
     <div class="col-sm-8">
         <div class="col-sm-4" style="margin-top:1em" ng-repeat="n in dataContact|filter:search|range:(selectedPage-1)*pageSize|limitTo:pageSize">
-            <div class="col-sm-12" style="box-shadow:3px 3px 3px 3px #708090">
+            <div class="col-sm-12 panel panel-green" style="box-shadow:3px 3px 3px 3px #708090">
                 <i class="fa fa-trash-alt"></i>
-                <h3 class="col-sm-12 text-center bg-warning"><strong>{{n.Name}}</strong></h3>
-                <hr />
-                <p>{{n.Content.substring(0,30)}}</p>
-                <small class="text-danger">{{n.Status|seen}}</small>
-                <small class="col-sm-12 text-justify float-right">{{n.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</small>
-                <div>
-                    <button class="btn btn-link" ng-click="reply(n.ID)" data-toggle="modal" data-target="#exampleModal">Xem chi tiết</button>
-                    <div ng-hide="CheckAutDelete">
-                        <button class="btn btn-link" ng-click="remove(n.ID)" ng-hide="n.Status==false" data-toggle="modal" data-target="#exampleModal2">Xóa</button>
+                <div class="panel-heading">
+                    <strong>{{n.Name}}</strong>
+                </div>
+                <div class="panel-body">
+                    <p>{{n.Content.substring(0,30)}}</p>
+                    <small class="text-danger">{{n.Status|seen}}</small>
+                    <br />
+                    <small class="text-justify float-right">{{n.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</small>
+                    <div>
+                        <button class="btn btn-link" ng-click="reply(n.ID)" data-toggle="modal" data-target="#exampleModal">Xem chi tiết</button>
+                        <div ng-hide="CheckAutDelete">
+                            <button class="btn btn-link" ng-click="remove(n.ID)" ng-hide="n.Status==false" data-toggle="modal" data-target="#exampleModal2">Xóa</button>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <div class="col-sm-12" style="margin-top:2em">

@@ -1,0 +1,163 @@
+﻿
+@{
+    ViewBag.Title = "Nhóm tài khoản";
+    Layout = "~/Views/layout/_LayoutAdmin.cshtml";
+}
+
+<div class="row" ng-controller="GroupUserAdmin" ng-cloak>
+    <div class="col-sm-9 push-7">
+        <div class="panel panel-green">
+            <div class="panel-heading text-center" ng-hide="allHide">Danh sách nhóm tài khoản</div>
+
+            <div class="panel-body" ng-hide="allHide">
+                <div class="col-sm-4" ng-repeat="n in dataAll|filter:seachrGroup|range:(selectedPage-1)*pageSize|limitTo:pageSize">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <p class="text-center"><strong>Tài khoản</strong></p>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group row">
+                                <p class="col-sm-4">Tên nhóm</p>
+                                <div class="col-sm-8">
+                                    <p class="col-sm-12">{{n.NameType}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row" ng-hide="CheckAutActive">
+                                <p class="col-sm-5">Kích hoạt</p>
+                                <div class="col-sm-7" ng-switch="n.ID==1||n.ID==4">
+                                    <p ng-switch-when="true">{{n.Active|status}}</p>
+                                    <button ng-click="ChangeType(n.ID)" class="btn btn-link" ng-switch-when="false">{{n.Active|status}}</button>
+                                </div>
+                            </div>
+                            <div class="form-group row" ng-hide="!CheckAutActive">
+                                <p class="col-sm-5">Kích hoạt</p>
+                                <div class="col-sm-7">
+                                    <p>{{n.Active|status}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <p class="col-sm-5">Người tạo</p>
+                                <div class="col-sm-7">
+                                    <p ng-repeat="acc in accountAll| filter:{ 'ID':  n.Creator}:true">{{acc.FirstName}} {{acc.LastName}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <p class="col-sm-5">Ngày tạo</p>
+                                <div class="col-sm-7">
+                                    <p>{{n.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row" ng-switch="n.ID==1||n.ID==4">
+                                <p ng-switch-when="true" class="col-sm-12">Không thể thay đổi</p>
+                                <div class="col-sm-6" ng-switch-when="false" ng-hide="CheckAutEdit">
+                                    <button class="btn btn-link txt-center" ng-click="Edit(n.ID)" data-toggle="modal" data-target="#exampleModal">Sửa</button>
+                                </div>
+                                <div class="col-sm-6" ng-switch-when="false" ng-hide="CheckAutDelete">
+                                    <button class="btn btn-link txt-center" ng-click="delete(n.ID)" data-toggle="modal" data-target="#exampleModal">Xóa</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12" style="margin-top:2em">
+                    <div class="float-right">
+                        <a class="btn btn-light" ng-class="PagePrevActive()" ng-click="goToPrev()"><small><<</small></a>
+                        <a class="btn btn-info" ng-class="PageActive($index+1)" ng-repeat="n in data=(dataAll|filter:seachrGroup|pageCount:pageSize)" ng-click="toPage($index+1)">{{$index+1}}</a>
+                        <a class="btn btn-light" ng-class="PageNextActive()" ng-click="goToNext()"><small>>></small></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Button trigger modal -->
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="exampleModalLabel" ng-hide="AddHide">Thêm loại tài khoản</h3>
+                            <h3 class="modal-title" id="exampleModalLabel" ng-hide="EditHide">Sửa loại tài khoản</h3>
+                            <h3 class="modal-title" id="exampleModalLabel" ng-hide="DeleteHide">Xóa loại tài khoản</h3>
+                            <button type="button" class="close" data-dismiss="modal" ng-click="Clear()" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @*them*@
+                            <div ng-hide="AddHide">
+                                <div class="form-group row">
+                                    <p class="col-sm-3">Tên nhóm</p>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" ng-model="NewNameType" placeholder="Tên nhóm tài khoản mới.." />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <p class="col-sm-3">
+                                        Chọn quyền hạn:
+                                    </p>
+                                    <div class="col-sm-12">
+                                        <div class="form-check col-sm-3" ng-repeat="i in dataAuthorities">
+                                            <input type="checkbox" class="col-sm-2 form-check-input" checklist-model="List.dataAuthorities" checklist-value="i.ID">
+                                            <label class="form-check-label  col-sm-10" for="exampleCheck1">{{i.Name}}</label>
+                                            <hr />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*sua*@
+                            <div ng-hide="EditHide">
+                                <div class="form-group row">
+                                    <p class="col-sm-3">Tên nhóm </p>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" ng-model="dataEdit1.NameType" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <p class="col-sm-3">
+                                        Chọn quyền hạn:
+                                    </p>
+                                    <div class="col-sm-12">
+                                        <div class="form-check col-sm-3" ng-repeat="i in dataAuthorities">
+                                            <input type="checkbox" class="col-sm-2 form-check-input" checklist-model="List.dataAuthorities" checklist-value="i.ID">
+                                            <label class="form-check-label  col-sm-10" for="exampleCheck1">{{i.Name}}</label>
+                                            <hr />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*xoa*@
+                            <div ng-hide="DeleteHide">
+                                <p class="col-sm-12 text-center"><strong class="text-danger">Bạn có chắc muốn xóa loại {{dataDel.NameType}}</strong></p>
+                                <br />
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"  ng-hide="EditHide" ng-click="EditType(dataEdit1.ID,dataEdit1.NameType,List.dataAuthorities)">Lưu</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"  ng-hide="AddHide" ng-click="NewType(NewNameType,List.dataAuthorities)">Lưu</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"  ng-hide="DeleteHide" ng-click="RemoveType(dataDel.ID)">Lưu</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="Clear()">Đóng</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3 pull-7">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <h4 class="text-center">Danh Mục</h4>
+            </div>
+            <div class="panel-body">
+                <div class="list-group">
+                    <div class=" list-group-item" ng-hide="allHide">
+                        <p>Tìm kiếm:</p>
+                        <input class="form-control" ng-model="seachrGroup" type="search" placeholder="Tìm kiếm" aria-label="Search">
+                    </div>
+                    <button class="list-group-item" ng-click="User()">Danh sách loại</button>
+                    <button class="list-group-item" ng-click="AddAcc()" ng-hide="CheckAutAdd" data-toggle="modal" data-target="#exampleModal">Thêm loại</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

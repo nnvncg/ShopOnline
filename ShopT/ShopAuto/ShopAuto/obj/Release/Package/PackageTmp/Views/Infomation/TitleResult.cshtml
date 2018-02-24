@@ -1,0 +1,13 @@
+﻿
+@using ShopAuto.Models
+@model List<ShopInformation>
+
+
+@foreach (var item in Model)
+{
+
+    <meta name="description" content="@item.NameShop">
+    <meta name="keywords" content="@item.Keywords">
+    <meta name="author" content="Internship CongNV">
+    <link rel="shortcut icon" href="@item.IconShop"/>
+}

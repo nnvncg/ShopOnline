@@ -1,0 +1,104 @@
+﻿<!-- Button trigger modal -->
+@*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter-100-1-2">
+        Đăng nhập
+    </button>*@
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter-100-1-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document" ng-controller="resetPass">
+
+        <div class="modal-content" ng-hide="Login">
+            <div class="modal-header .bg-info">
+                <h5 class="modal-title" id="exampleModalLongTitle">Đăng nhập vào tài khoản của bạn</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group form-inline">
+                        <label for="exampleInputEmail1" class="col-sm-3 text-left">Email</label>
+                        <input type="email" class="form-control col-sm-8" id="Email1" aria-describedby="emailHelp" placeholder="Email của bạn">
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="exampleInputPassword1" class="col-sm-3 text-left">Mật khẩu</label>
+                        <input type="password" class="form-control col-sm-8" id="Password1" placeholder="Mật khẩu">
+                    </div>
+                </form>
+                <button class="btn btn-link" ng-click="CheckResetPass()">Quên mật khẩu..</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-primary" id="loginCus">Đăng nhập</button>
+                <div class="col-sm-1"></div>
+            </div>
+        </div>
+        <div class="modal-content" ng-hide="resetPassword">
+            <div class="modal-header .bg-info">
+                <h5 class="modal-title" id="exampleModalLongTitle">Xác nhận email</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form name="frmReset">
+                    <div class="form-group form-inline">
+                        <label for="exampleInputEmail1" class="col-sm-3 text-left">Email</label>
+                        <input type="email" class="form-control col-sm-8" ng-model="EmailReset" required name="EmailReset" aria-describedby="emailHelp" placeholder="Email của bạn">
+
+                    </div>
+                    <div class="form-group form-inline" ng-hide="Code">
+                        <label for="exampleInputEmail1" class="col-sm-3 text-left">Mã xác nhận</label>
+                        <input type="text" class="form-control col-sm-8" ng-model="CodeReset" ng-minlength="4" required name="CodeReset" placeholder="Mã xác nhận của bạn">
+
+                    </div>
+                </form>
+                <button class="btn btn-link" ng-click="CheckLogin() ">Về đăng nhập..</button>
+                <button class="btn btn-link" ng-click="CheckCode()" ng-hide="SendCode1">Bạn có code..</button>
+                <button class="btn btn-link" ng-click="SendEmail1()" ng-hide="Code">Gửi lại mã..</button>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" ng-hide="SendCode1" class="btn btn-primary" ng-disabled="frmReset.EmailReset.$invalid" ng-click="SendCode(EmailReset)">Lấy mã xác nhận.</button>
+                <button type="button" ng-hide="Code" class="btn btn-primary" ng-disabled="frmReset.$invalid" ng-click="CheckCode2(EmailReset,CodeReset)">Xác nhận.</button>
+                <div ng-hide="frmNewPass.NewPass.$invalid">
+                    <button type="button" ng-hide="resetP" class="btn btn-primary" ng-disabled="NewPass!=NewPass2" ng-click="ResetPass(EmailReset,NewPass)">Đổi mật khẩu.</button>
+                </div>
+
+                <div class="col-sm-1"></div>
+            </div>
+        </div>
+        <div class="modal-content" ng-hide="resetP">
+            <div class="modal-header .bg-info">
+                <h5 class="modal-title" id="exampleModalLongTitle">Đổi mật khẩu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form name="frmNewPass">
+                    <div class="form-group form-inline">
+                        <label class="col-sm-3 text-left">Mật khẩu mới</label>
+                        <input type="password" class="form-control col-sm-8" name="NewPass" ng-model="NewPass" ng-maxlength="80" required ng-minlength="6" aria-describedby="emailHelp" placeholder="Mật khẩu mới">
+                        <label class="text-danger" ng-hide="!frmNewPass.NewPass.$invalid">Mật khẩu quá ngắn hoặc quá dài.</label>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label class="col-sm-3 text-left">Xác nhận mật khẩu</label>
+                        <input type="password" class="form-control col-sm-8" ng-model="NewPass2" aria-describedby="emailHelp" placeholder="Xác nhận mật khẩu">
+                        <label class="text-danger" ng-hide="NewPass==NewPass2">Xác nhận mật khẩu sai.</label>
+                    </div>
+                </form>
+                <button class="btn btn-link" ng-click="CheckLogin() ">Về đăng nhập..</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <div ng-hide="frmNewPass.NewPass.$invalid">
+                    <button type="button" ng-hide="resetP" class="btn btn-primary" ng-disabled="NewPass!=NewPass2" ng-click="ResetPass(EmailReset,NewPass)">Đổi mật khẩu.</button>
+                </div>
+
+                <div class="col-sm-1"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -18,6 +18,7 @@ namespace ShopAuto.Controllers.ControllersAdmin
             }
             else
             {
+
                 return View();
             }
         }
@@ -29,16 +30,27 @@ namespace ShopAuto.Controllers.ControllersAdmin
             }
             else
             {
-                return View();
+                int _id = Convert.ToInt32(Session["IDAccAdmin"].ToString());
+                int _userType = _db.Users.FirstOrDefault(n => n.ID == _id).TypeAcc;
+                UserGroup _gr = _db.UserGroups.FirstOrDefault(n => n.ID == _userType);
+                if (_gr.Authorities.Contains("-32-") || _gr.Authorities.Contains("-1-"))
+                {
+                    return View();
+                }
+                return Redirect("~/Page/404/index.html");
+
             }
         }
         public JsonResult GetNewCart()
-        {
-            
+        {           
             List<Bill> lstOrder = _db.Bills.OrderByDescending(n => n.CreateDate).Where(n=>n.Seen==false).Take(4).ToList();
             return Json(lstOrder, JsonRequestBehavior.AllowGet);
         }
-
+        public JsonResult BillByCreator(int _id)
+        {
+            List<Bill> lstOrder = _db.Bills.OrderByDescending(n => n.CreateDate).Where(n => n.Creator == _id).ToList();            
+            return Json(lstOrder, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult QuantityAllOrder()
         {          
             var lstOrder = _db.Bills.Count();

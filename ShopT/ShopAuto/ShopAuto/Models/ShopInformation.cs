@@ -23,6 +23,7 @@ namespace ShopAuto.Models
         public string Phone2 { get; set; }
         public string BankAcc { get; set; }
         public string Email { get; set; }
+        public string PassWordEmail { get; set; }
         public string FaceBook { get; set; }
         public string Google { get; set; }
         public string Zalo { get; set; }

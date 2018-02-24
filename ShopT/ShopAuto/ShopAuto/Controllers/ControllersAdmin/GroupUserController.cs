@@ -18,7 +18,15 @@ namespace ShopAuto.Controllers.ControllersAdmin
             }
             else
             {
-                return View();
+                int _id = Convert.ToInt32(Session["IDAccAdmin"].ToString());
+                int _userType = _db.Users.FirstOrDefault(n => n.ID == _id).TypeAcc;
+                UserGroup _gr = _db.UserGroups.FirstOrDefault(n => n.ID == _userType);
+                if (_gr.Authorities.Contains("-26-") || _gr.Authorities.Contains("-1-"))
+                {
+                    return View();
+                }
+                return Redirect("~/Page/404/index.html");
+
             }
         }
         [HttpPost]
@@ -27,8 +35,8 @@ namespace ShopAuto.Controllers.ControllersAdmin
             if (Session["IDAccAdmin"] != null)
             {
                 int id =Convert.ToInt32(Session["IDAccAdmin"]);
-                
-                var lstAut = _db.UserGroups.FirstOrDefault(n=>n.ID==id).Authorities.Split('-');
+                int grId = _db.Users.FirstOrDefault(n => n.ID == id).TypeAcc;
+                var lstAut = _db.UserGroups.FirstOrDefault(n=>n.ID== grId).Authorities.Split('-');
                 foreach (string item in lstAut)
                 {
                     item.ToString();

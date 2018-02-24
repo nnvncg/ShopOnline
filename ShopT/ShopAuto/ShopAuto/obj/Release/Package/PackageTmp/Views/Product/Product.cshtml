@@ -1,0 +1,126 @@
+﻿
+<div class="bg-faded p-4 my-4" id="MonAn" ng-controller="LayoutCustomer">
+    <hr class="divider">
+    <h2 class="text-center text-lg text-uppercase my-0">
+        Sản phẩm <strong>mới</strong> <a href="/Product/AllProduct"><span class="badge badge-danger">Xem Thêm</span></a>
+    </h2>
+    <hr class="divider">
+    <div class="row">
+
+        <div class="media col-md-4 mb-2" ng-repeat="n in dataProductNew">
+            <div class="card" style="width: 20rem; box-shadow: 5px 3px 5px #708090" ng-controller="Cart">
+                <img class="card-img-top" ng-src="{{n.Image}}" style="max-height: 225px; min-height: 225px" alt="{{n.ProductName}}">
+                <div class="card-body">
+                    <div ng-switch="a=(n.ProductName.length>30)">
+                        <h4 class="card-title" ng-switch-when="false">{{n.ProductName}}</h4>
+                        <h4 class="card-title" ng-switch-when="true">{{n.ProductName.substring(0,30)}}</h4>
+                    </div>
+                    <p class="card-text">
+                        Giá món ăn: <b style="color: #FF4000">{{n.Price}}</b> VND
+                    </p>
+
+                    <div>
+                        <div class="col-5 col-sm-6 float-left" ng-controller="Cart">
+                            <button id="btnGioHang" class="btn btn-info" ng-click="setOrder(n.ID)">Đặt hàng</button>
+                        </div>
+                        <div class="col-5 col-sm-5 float-left">
+                            <button style="font-family: 'Roboto Condensed', sans-serif" class="btn btn-info" ng-click="Coment(n.ID)" data-toggle="modal" data-target=".bd-example-modal-lg-{{n.ID}}-3">Xem Chi Tiết</button>
+                        </div>
+                    </div>
+                    <div class="modal fade bd-example-modal-lg-{{n.ID}}-3" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">{{n.ProductName}}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="Clear()">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body pre-scrollable text-center" style="min-height: 450px">
+                                    <img ng-src="{{n.Image}}" class="img-fluid" alt="{{n.ProductName}}" style="width: 800px">
+                                    <br />
+                                    <br />
+                                    <p class="text-left" ng-bind-html="n.Detail"></p>
+                                    <br />
+                                    <p class="text-left">Số lượng còn lại : {{n.Quantity}}</p>
+                                    @* binhluan*@
+                                    <hr />
+                                    <div class="bg-faded my-4 ">
+                                        <hr class="divider">
+                                        <h2 class="text-center text-lg text-uppercase my-0">
+                                            Bình <strong>Luận</strong>
+                                        </h2>
+                                        <hr class="divider">
+                                        <div>
+                                            <div class="form-group row">
+                                                <label class="col-5" for="exampleFormControlTextarea1">Hãy cho chúng tôi biết ý kiến của bạn: </label>
+                                                <div class="col-12" id="BinhLuan2">
+                                                    @if (Session["IdCus"] != null)
+                                                    {
+                                                        <form name="myForm">
+                                                            <div class="form-group text-left form-inline">
+                                                                <textarea class="form-control col-sm-10" rows="3" name="Cmm" ng-maxlength="1000" ng-minlength="5" required title="Bình luận phải từ 5 đến 1000 ký tự!" ng-model="comment"></textarea>
+                                                                <div class="col-sm-2 text-danger">
+                                                                    <p ng-hide="!myForm.Cmm.$error.minlength">Bình luận quá ngắn</p>
+                                                                    <p ng-hide="!myForm.Cmm.$error.maxlength">Bình luận quá dài</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="form-inline">
+                                                                    <input ng-hide="myForm.Cmm.$invalid" type="button" class="btn btn-secondary mr-5 col-sm-3 pull-right" ng-click="AddComment(n.ID,comment)" value="Đăng" />
+                                                                </div>
+
+                                                            </div>
+                                                        </form>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p class="alert alert-danger">Bạn cần đăng nhập để bình luận.</p>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h3><strong>Danh sách bình luận: </strong></h3>
+                                            </div>
+                                            <div id="Comment" ng-repeat="n in dataComment">
+                                                <hr />
+                                                <div class="media"ng-repeat="acc in accountAll| filter:{ 'ID':  n.Creator}:true">
+                                                    <img class="mr-3 rounded-circle" ng-src="{{acc.Image}}" style="width:10%" alt="Generic placeholder image" />
+                                                    <div class="media-body text-left">
+                                                        <h5 class="mt-0">{{acc.FirstName}} {{acc.LastName}}</h5>
+                                                        {{n.Comment1}}
+                                                        <p class="font-italic text-right font-weight-light text-muted"><small>{{n.CreateDate.replace("/Date(","").replace(")/","")|date:"dd/MM/yyyy '_' h:mma"}}</small></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @* comment *@
+
+                                </div>
+
+                                <div class="card-footer  form-inline">
+                                    <div class="col-4 col-sm-7">
+                                        <p>
+                                            Giá: <strong style="color: #FF4000">{{n.Price}} </strong> VND
+                                        </p>
+                                    </div>
+
+
+                                    <div class="col-8 col-sm-5 " ng-controller="Cart">
+                                        <button id="btnGioHang" class="btn btn-info float-right col-6 col-sm-5 ml-sm-2" ng-click="setOrder(n.ID)">Đặt hàng</button>
+                                        <button type="button" class="btn btn-secondary float-right col-6 col-sm-5" data-dismiss="modal" ng-click="Clear()">Xem sau</button>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*//*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

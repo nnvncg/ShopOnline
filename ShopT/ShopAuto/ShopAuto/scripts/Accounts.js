@@ -14,15 +14,14 @@
                 window.location.href = $(location).attr('href');
             }
             if (data == 2) {
-                alert('Tài khoản đã bị khóa hoặc chưa được kích hoạt!!')
-            }
-            
+                $.notify('Tài khoản chưa được kích hoạt!!!');
+            }           
             if (data == 0) {
-                alert('Tài khoản hoặc mật khẩu sai!!')
+                $.notify('Tài khoản hoặc mật khẩu sai!');
             }
         },
         error: function (err) {
-            alert("Lỗi: Đăng nhập thất bại!");
+            $.notify('Lỗi: Đăng nhập thất bại!');
             clear();
         }
     })

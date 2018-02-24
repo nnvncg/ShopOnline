@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "Sửa Google Map";
+    Layout = "~/Views/layout/_LayoutAdmin.cshtml";
+}
+
+<div class="col-sm-12" ng-controller="InformationStatus">
+    <div class="col-sm-12" style="margin-top:2%;margin-bottom:2%">
+        <div class="card col-sm-4" style="margin-right:1.5%;box-shadow:3px 3px 3px 3px #708090">
+            <div class="card-body card-warning ">
+                <br />
+                <h4 class="card-title text-center alert alert-warning">Địa chỉ Map Google</h4>
+                <hr />
+                <div class="form-group form-inline row">
+                    <label class=" col-md-2">Đường dẫn</label>
+                    <p class=" col-md-10">{{data.URLMap.substring(0,50)}}...</p>
+                    <div class=" col-md-10">
+                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" ng-disabled="CheckEditInfor">
+                            Chỉnh sửa Url
+                        </a>
+                        <div class="collapse" id="collapseExample">
+                            <div class="card card-body col-sm-12">
+                                <textarea class="d-block mt-5" style="width:15em;height:15em" ng-model="Map"></textarea>
+                                <button class="btn btn-outline-primary" ng-click="SaveMap()">Lưu lại</button> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+        <div class="col-sm-7" style="box-shadow:3px 3px 3px 3px #708090">
+            <div class="card-body card-warning ">
+                <br />
+                <h4 class="card-title text-center alert alert-warning">Địa chỉ</h4>
+                <hr />
+                <div>
+                    <iframe ng-src="{{Map}}"  frameborder="0" style="height:330px;width:100%"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

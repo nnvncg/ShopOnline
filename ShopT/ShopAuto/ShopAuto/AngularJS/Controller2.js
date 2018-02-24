@@ -1,7 +1,21 @@
 ﻿/// <reference path="../scripts/angular.min.js" />
 //các trang admin
 myCntr.controller("OrderAdmin", function ($scope, $http) {
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "24" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewDetailAcc = false;
+            }
+            else {
+                $scope.CheckAutViewDetailAcc = true;
 
+            }
+        })
     $scope.dataOrderNew = null;
     $scope.quantityNewOrder = 0;
     //đếm tổng order
@@ -50,7 +64,25 @@ myCntr.controller("OrderAdmin", function ($scope, $http) {
     }
 });
 //danh sách các sản phẩm *
-myCntr.controller("ProductAdmin", function ($scope, $http, Upload, $notify) {
+myCntr.controller("ProductAdmin", function ($scope, $http, Upload, $notify, $window) {
+    $scope.ViewAccount = function (id) {
+        $window.open('/AccountAdmin/AccountDetail/' + id);
+    }
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "24" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewDetailAcc = false;
+            }
+            else {
+                $scope.CheckAutViewDetailAcc = true;
+
+            }
+        })
     $http(
         {
             method: "POST",
@@ -421,7 +453,25 @@ myCntr.controller("ProductAdmin", function ($scope, $http, Upload, $notify) {
     }
 
 })
-myCntr.controller("MenuController", function ($scope, $http, $notify) {
+myCntr.controller("MenuController", function ($scope, $http, $notify, $window) {
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "24" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewDetailAcc = false;
+            }
+            else {
+                $scope.CheckAutViewDetailAcc = true;
+
+            }
+        })
+    $scope.ViewAccount = function (id) {
+        $window.open('/AccountAdmin/AccountDetail/' + id);
+    }
     $http(
         {
             method: "POST",
@@ -669,7 +719,25 @@ myCntr.controller("MenuController", function ($scope, $http, $notify) {
     }
 });
 //order 
-myCntr.controller("OrderAdminController", function ($scope, $http, $notify) {
+myCntr.controller("OrderAdminController", function ($scope, $http, $notify, $window) {
+    $scope.ViewAccount = function (id) {
+        $window.open('/AccountAdmin/AccountDetail/' + id);
+    }
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "24" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewDetailAcc = false;
+            }
+            else {
+                $scope.CheckAutViewDetailAcc = true;
+
+            }
+        })
     $http(
         {
             method: "POST",
@@ -885,7 +953,25 @@ myCntr.controller("OrderAdminController", function ($scope, $http, $notify) {
     }
 });
 //bill status
-myCntr.controller("BillStatus", function ($scope, $http, $notify) {
+myCntr.controller("BillStatus", function ($scope, $http, $notify, $window) {
+    $scope.ViewAccount = function (id) {
+        $window.open('/AccountAdmin/AccountDetail/' + id);
+    }
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "24" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewDetailAcc = false;
+            }
+            else {
+                $scope.CheckAutViewDetailAcc = true;
+
+            }
+        })
     $http(
         {
             method: "POST",

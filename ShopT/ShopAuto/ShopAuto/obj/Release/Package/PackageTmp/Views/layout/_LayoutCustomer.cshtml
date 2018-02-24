@@ -1,0 +1,163 @@
+﻿@using System.Web.Optimization
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    @Html.Action("TitleResult", "Infomation")
+    <title>@ViewBag.Title</title>
+    <!-- Bootstrap core CSS -->
+    <script src="~/scripts/jquery-1.9.1.min.js"></script>
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+    <link href="~/Content/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="//cdn.ckeditor.com/4.8.0/standard/ckeditor.js"></script>
+    <!-- Custom fonts for this template -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Encode+Sans" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="~/Content/css/business-casual.css" rel="stylesheet">
+    @if (Session["CusEmail"] != null)
+    {
+        <style>
+            #DangXuat {
+                display: block;
+            }
+
+            #DangNhap {
+                display: none;
+            }
+        </style>
+        if (Convert.ToInt32(Session["GroupAcc"]) == 4)
+        {
+            <style>
+                #QLAdmin {
+                    display: none;
+                }
+            </style>
+        }
+    }
+    else
+    {
+        <style>
+            #DangXuat, #QLAdmin {
+                display: none;
+            }
+        </style>
+    }
+
+</head>
+
+<body id="MauChu"  ng-app="myApp" ng-cloak>
+
+    @Html.Action("Header", "Infomation")
+    <div class="container">
+        <!--Cài đặt đa giao diện-->
+        <div style="position: fixed; top: 5%; left: 0.5%; z-index: 2" id="GioHang1">
+            <div class="panel panel-default" style="width:auto">
+                <div class="panel-heading ">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapse1">
+                            <b class="badge badge-light rounded-circle" style="color:black"><i class="fa fa-cog fa-spin fa-1x fa-fw"></i></b>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse1" class="panel-collapse collapse alert alert-light col-sm-2">
+                    <h4>Màu chữ</h4>
+                    <button type="button" class="btnMauChu1 btn btn-dark rounded-circle" data-color="text-dark"></button>
+                    <button type="button" class="btnMauChu5 btn btn-light rounded-circle border border-dark" data-color="text-light"></button>
+                    <button type="button" class="btnMauChu2 btn btn-primary rounded-circle" data-color="text-primary"></button>
+                    <button type="button" class="btnMauChu3 btn btn-danger rounded-circle" data-color="text-danger"></button>
+                    <button type="button" class="btnMauChu4 btn btn-warning rounded-circle" data-color="text-warning"></button>
+                    <hr />
+                    <h4>Màu nền</h4>
+                    <button type="button" class="btnMauNen2 btn btn-light rounded-circle border border-dark" data-color="#FAFAFA"></button>
+                    <button type="button" class="btnMauNen1 btn btn-dark rounded-circle" data-color="#19070B"></button>
+                    <button type="button" class="btnMauNen3 btn btn-success rounded-circle" data-color="#A9F5D0"></button>
+                    <button type="button" class="btnMauNen4 btn btn-warning rounded-circle" data-color="#DF7401"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Giỏ hàng -->
+
+        @Html.Action("Cart", "Order")
+
+        <!-- lên đầu trang -->
+        <button type="button" class="btn btn-secondary" id="goTop" data-toggle="tooltip" data-placement="left" title="Lên đầu trang!">
+            <span class="fa fa-chevron-up"></span>
+        </button>
+        <div>
+            @Html.Action("Accounts", "Accounts")
+            @Html.Action("Registration", "Accounts")
+        </div>
+        <div class="bg-faded p-4 my-4" id="nivoSlider" ng-controller="SliderCustomer2">
+            <!-- Image Carousel -->
+            <div ng-hide="Check">
+                @Html.Action("Index", "Slider")
+            </div>
+
+            <!-- Welcome Message -->
+            @Html.Action("BodyResult", "Infomation")
+            <div>
+                <button class="btn btn-outline-secondary" ng-hide="Check" ng-click="changeHide()">
+                    <img src="~/Content/img/arrow_up.png" /> Ẩn
+                </button>
+                <button class="btn btn-outline-secondary" ng-hide="!Check" ng-click="changeShow()">
+                    <img src="~/Content/img/arrow_down.png" /> Hiện
+                </button>
+            </div>
+        </div>
+
+        @*Món ăn*@
+        @RenderBody()
+        @Html.Action("FooterResult", "Infomation")
+        <footer class="bg-faded text-center py-2">
+            <div class="container">
+                <p class="m-0">Copyright &copy; <a href="https://www.facebook.com/nnvncg" target="_blank" title="Facebook của người thiết kế">Công Nguyễn</a></p>
+
+
+            </div>
+        </footer>
+        <!-- Bootstrap core JavaScript -->
+        <script src="~/Content/vendor/jquery/jquery.min.js"></script>
+        @*<script src="~/scripts/jquery.validate.min.js"></script>*@
+        @*<script src="~/scripts/jquery.validate.unobtrusive.min.js"></script>*@
+        <script src="~/Content/vendor/popper/popper.min.js"></script>
+        <script src="~/Content/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="~/scripts/jquery.ajaxfileupload.js"></script>
+        <script src="~/scripts/notify.min.js"></script>
+        <script src="~/scripts/multiple-themes.js"></script>
+        <script src="~/scripts/angular.min.js"></script>
+        <script src="~/scripts/ng-file-upload.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-sanitize.js"></script>
+        @*<script src="~/AngularJS/Module.js"></script>*@
+        <script src="~/scripts/angular-notify.js"></script>
+
+        @Scripts.Render("~/bundles/AngularJS")
+        <script src="~/scripts/jquery.unobtrusive-ajax.min.js"></script>
+        <script src="~/scripts/Accounts.js"></script>
+        <script src="~/Content/js/custom-file-input.js"></script>
+        <script src="~/scripts/angular-ckeditor.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment-with-locales.min.js"></script>
+        <script src="~/Content/js/ngDatepicker.min.js"></script>
+        <script src="~/scripts/checklist-model.js"></script>
+        <script>
+            $(function () {
+                $(window).scroll(function () {
+                    if ($(this).scrollTop() > 100) $('#goTop').fadeIn();
+                    else $('#goTop').fadeOut();
+                });
+                $('#goTop').click(function () {
+                    $('body,html').animate({ scrollTop: 0 }, 'slow');
+                });
+            });
+        </script>
+    </div>
+
+</body>
+
+</html>

@@ -1,20 +1,146 @@
 ﻿/// <reference path="../scripts/angular.min.js" />
-myCntr.controller("Layout", function ($scope, $http) {
-        $http({
-            method: "get",
-            url: "/ShopInformtionAdmin/DataInformation"
+myCntr.controller("Layout", function ($scope, $http, $window) {
+    //phan quyen
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "5" }
         }).then(function (response) {
-            $scope.dataLayout = response.data;
+            if (response.data) {
+                $scope.CheckAutViewMenu = false;
+            }
+            else {
+                $scope.CheckAutViewMenu = true;
+            }
         })
-        $http({
-            method: "get",
-            url: "/AccountAdmin/NameAccountCurrent"
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "12" }
         }).then(function (response) {
-            $scope.dataAccountCurrent= response.data;
+            if (response.data) {
+                $scope.CheckAutViewCmt = false;
+            }
+            else {
+                $scope.CheckAutViewCmt = true;
+            }
         })
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "17" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewInfWeb = false;
+            }
+            else {
+                $scope.CheckAutViewInfWeb = true;
+            }
+        })
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "19" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewProd = false;
+            }
+            else {
+                $scope.CheckAutViewProd = true;
+            }
+        })
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "26" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewGroup = false;
+            }
+            else {
+                $scope.CheckAutViewGroup = true;
+            }
+        })
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "35" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewSlider = false;
+            }
+            else {
+                $scope.CheckAutViewSlider = true;
+            }
+        })
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "14" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewContact = false;
+            }
+            else {
+                $scope.CheckAutViewContact = true;
+            }
+        })
+    //
+    $http({
+        method: "get",
+        url: "/AccountAdmin/CheckLogIn"
+    }).then(function (response) {
+        if (!response.data) {
+            $window.location.href = '/AccountAdmin/Login';
+        }
+    })
+    $http({
+        method: "get",
+        url: "/ShopInformtionAdmin/DataInformation"
+    }).then(function (response) {
+        $scope.dataLayout = response.data;
+    })
+    $http({
+        method: "get",
+        url: "/AccountAdmin/NameAccountCurrent"
+    }).then(function (response) {
+        $scope.dataAccountCurrent = response.data;
+    })
 });
 //các trang admin 2
-myCntr.controller("SliderStatus", function ($scope, $http, Upload, $notify) {
+myCntr.controller("SliderStatus", function ($scope, $http, Upload, $notify, $window) {
+    $scope.ViewAccount = function (id) {
+        $window.open('/AccountAdmin/AccountDetail/' + id);
+    }
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "24" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewDetailAcc = false;
+            }
+            else {
+                $scope.CheckAutViewDetailAcc = true;
+
+            }
+        })
     $http(
         {
             method: "POST",
@@ -297,6 +423,22 @@ myCntr.controller("SliderStatus", function ($scope, $http, Upload, $notify) {
 });
 //*
 myCntr.controller("InformationStatus", function ($scope, $http, Upload, $notify, $sce) {
+    //xet quyeen
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "18" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckEditInfor = false;
+            }
+            else {
+                $scope.CheckEditInfor = true;
+            }
+        })
+    //
     function GetAll() {
         $http(
             {
@@ -323,7 +465,7 @@ myCntr.controller("InformationStatus", function ($scope, $http, Upload, $notify,
     function Clear() {
         $scope.IntroduceHide = true;
         $scope.ContactHide = true;
-        $scope.ContactHide = true;
+        $scope.Contact2Hide = true;
     }
     $scope.Introduce = function () {
         Clear();
@@ -380,7 +522,8 @@ myCntr.controller("InformationStatus", function ($scope, $http, Upload, $notify,
                     phone: $scope.data2.Phone,
                     phone2: $scope.data2.Phone2,
                     email: $scope.data2.Email,
-                    bankAcc: $scope.data2.BankAcc
+                    bankAcc: $scope.data2.BankAcc,
+                    password: $scope.data2.PassWordEmail
                 },
                 headers: { "Content-Type": "application/json" }
             }).then(function (response) {
@@ -477,7 +620,25 @@ myCntr.controller("InformationStatus", function ($scope, $http, Upload, $notify,
             })
     }
 });
-myCntr.controller("CategoryAdmin", function ($scope, $http, Upload, $notify) {
+myCntr.controller("CategoryAdmin", function ($scope, $http, Upload, $notify, $window) {
+    $scope.ViewAccount = function (id) {
+        $window.open('/AccountAdmin/AccountDetail/'+id);
+    }
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "24" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewDetailAcc = false;
+            }
+            else {
+                $scope.CheckAutViewDetailAcc = true;
+
+            }
+        })
     $http(
         {
             method: "POST",
@@ -764,8 +925,25 @@ myCntr.controller("CategoryAdmin", function ($scope, $http, Upload, $notify) {
         // ... 
     };
 });
-myCntr.controller("CommentAdmin", function ($scope, $http, Upload, $notify) {
+myCntr.controller("CommentAdmin", function ($scope, $http, Upload, $notify, $window) {
+    $scope.ViewAccount = function (id) {
+        $window.open('/AccountAdmin/AccountDetail/' + id);
+    }
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "24" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewDetailAcc = false;
+            }
+            else {
+                $scope.CheckAutViewDetailAcc = true;
 
+            }
+        })
     $http(
         {
             method: "POST",
@@ -794,7 +972,7 @@ myCntr.controller("CommentAdmin", function ($scope, $http, Upload, $notify) {
                 $scope.CheckAutDelete = true;
             }
         })
-  
+
     $scope.pageSize = 3;
     $scope.selectedPage = 1;
     $scope.pageSize1 = 3;
@@ -1114,6 +1292,7 @@ myCntr.controller("ContactAdmin", function ($scope, $http, Upload, $notify) {
             }
             else {
                 $scope.CheckAutReply = true;
+
             }
         })
     $http(
@@ -1365,20 +1544,15 @@ myCntr.controller("AccountAdmin", function ($scope, $http, Upload, $notify, $win
     }
     $scope.userHide = true;
     $scope.AllHide = true;
-    user(1);
+    user();
     $scope.userHide = false;
-    function user(id) {
+    function user() {
         $scope.SearchHide = true;
-        $scope.IdAcc = id;
         $http(
             {
-                method: "POST",
+                method: "get",
                 url: "/AccountAdmin/AccById",
-                dataType: 'json',
-                data: {
-                    id: id
-                },
-                headers: { "Content-Type": "application/json" }
+
             }).then(function (response) {
                 $scope.dataUser = response.data;
             })
@@ -1438,13 +1612,12 @@ myCntr.controller("AccountAdmin", function ($scope, $http, Upload, $notify, $win
             })
     }
     $scope.ApplyAdd = function (file) {
-        id = $scope.IdAcc;
         file.upload = Upload.upload({
             url: '/AccountAdmin/ChangeImage',
-            data: { id, image: file },
+            data: { image: file },
         }).then(function (response) {
             if (response.data) {
-                user(1);
+                user();
                 $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
                 $notify.setPosition('bottom-left');
                 $notify.success('Đổi hình đại diện', 'Đổi hình đại diện thành công!'); $scope.clear;
@@ -1474,7 +1647,6 @@ myCntr.controller("AccountAdmin", function ($scope, $http, Upload, $notify, $win
                 url: "/AccountAdmin/ChangeName",
                 dataType: 'json',
                 data: {
-                    id: $scope.IdAcc,
                     firstName: $scope.FirstName,
                     lastName: $scope.LastName
                 },
@@ -1501,7 +1673,6 @@ myCntr.controller("AccountAdmin", function ($scope, $http, Upload, $notify, $win
                 url: "/AccountAdmin/ChangePhone",
                 dataType: 'json',
                 data: {
-                    id: $scope.IdAcc,
                     phone: $scope.Phone
                 },
                 headers: { "Content-Type": "application/json" }
@@ -1527,7 +1698,6 @@ myCntr.controller("AccountAdmin", function ($scope, $http, Upload, $notify, $win
                 url: "/AccountAdmin/ChangeAddess",
                 dataType: 'json',
                 data: {
-                    id: $scope.IdAcc,
                     addess: $scope.Addess
                 },
                 headers: { "Content-Type": "application/json" }
@@ -1546,37 +1716,69 @@ myCntr.controller("AccountAdmin", function ($scope, $http, Upload, $notify, $win
                 }
             })
     }
-    $scope.ChangeActive = function () {
-        $http(
-            {
-                method: "POST",
-                url: "/AccountAdmin/ChangeActive",
-                dataType: 'json',
-                data: {
-                    id: $scope.IdAcc
-                },
-                headers: { "Content-Type": "application/json" }
-            }).then(function (response) {
-                if (response.data) {
-                    user($scope.IdAcc);
-                    Clea();
-                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
-                    $notify.setPosition('bottom-left');
-                    $notify.success('Đổi tình trạng', 'Đổi tình trạng thành công!'); $scope.clear;
-                }
-                else {
-                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
-                    $notify.setPosition('bottom-left');
-                    $notify.error('Đổi tình trạng thoại', 'Đổi tình trạng thất bại!');
-                }
-            })
-    }
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "23" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutAdd = false;
+            }
+            else {
+                $scope.CheckAutAdd = true;
+            }
+        })
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "24" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewList = false;
+            }
+            else {
+                $scope.CheckAutViewList = true;
+            }
+        })
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "1031" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutEditType = false;
+            }
+            else {
+                $scope.CheckAutEditType = true;
+            }
+        })
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "25" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutActive = false;
+            }
+            else {
+                $scope.CheckAutActive = true;
+            }
+        })
+
     $scope.User = function () {
         $scope.SearchHide = true;
         $scope.userHide = false;
         $scope.AllHide = true;
         $scope.AddHide = true;
-        user(1);
+        user();
     }
     $scope.AddAcc = function () {
         $scope.AddHide = false;
@@ -2010,6 +2212,7 @@ myCntr.controller("GroupUserAdmin", function ($scope, $http, Upload, $notify) {
                 }
             })
     }
+
     $scope.EditType = function (id, name, authorities) {
         $http(
             {
@@ -2041,39 +2244,463 @@ myCntr.controller("GroupUserAdmin", function ($scope, $http, Upload, $notify) {
 }
 );
 myCntr.controller("LogInAdmin", function ($scope, $http, Upload, $notify, $window) {
-    $scope.LogIn = function (email,password) {
+    $scope.frmLogin = false;
+    $scope.frmForgetPassW = true;
+    $scope.frmResetPassW = true;
+
+    $scope.ToForgetPassW = function () {
+        $scope.frmLogin = true;
+        $scope.frmForgetPassW = false;
+        $scope.inputCode = true;
+        $scope.inputCode = true;
+        $scope.SendCode1 = false;
+        $scope.frmResetPassW = true;
+
+    }
+    $scope.ToLogin = function () {
+        $scope.frmLogin = false;
+        $scope.frmForgetPassW = true;
+        $scope.frmResetPassW = true;
+
+    }
+    $scope.ToInputCode = function () {
+        $scope.frmLogin = true;
+        $scope.frmForgetPassW = false;
+        $scope.inputCode = false;
+        $scope.SendCode1 = true;
+        $scope.frmResetPassW = true;
+    }
+    $scope.ToSendCode = function () {
+        $scope.frmLogin = true;
+        $scope.frmForgetPassW = false;
+        $scope.inputCode = true;
+        $scope.SendCode1 = false;
+        $scope.frmResetPassW = true;
+
+    }
+    $scope.SendCode = function (email) {
+        $http(
+            {
+                method: "POST",
+                url: "/AccountAdmin/SendCodeResetPass",
+                dataType: 'json',
+                data: { email: email },
+                headers: { "Content-Type": "application/json" }
+            }).then(function (response) {
+                if (response.data == true) {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.success('Gửi mã xác nhận', 'Gửi mã xác nhận thành công!');
+                    $scope.frmLogin = true;
+                    $scope.frmForgetPassW = false;
+                    $scope.inputCode = false;
+                    $scope.SendCode1 = true;
+                    $scope.frmResetPassW = true;
+                    $scope.EmailSend = '';
+
+                }
+                else {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.error('Gửi mã xác nhận', response.data);
+                    $scope.EmailSend = '';
+                }
+            })
+    }
+    $scope.CheckCode = function (email, code) {
+        $http(
+            {
+                method: "POST",
+                url: "/AccountAdmin/checkCode",
+                dataType: 'json',
+                data: {
+                    email: email,
+                    code: code
+                },
+                headers: { "Content-Type": "application/json" }
+            }).then(function (response) {
+                if (response.data == 2) {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.success('Xác nhận', 'Xác nhận thành công!');
+                    $scope.frmLogin = true;
+                    $scope.frmForgetPassW = true;
+                    $scope.inputCode = true;
+                    $scope.SendCode1 = true;
+                    $scope.frmResetPassW = false;
+                    $scope.CodeReset = '';
+                }
+                if (response.data == 1) {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.warning('Xác nhận', 'Email sai!');
+                    $scope.EmailReset = '';
+                    $scope.CodeReset = '';
+
+                }
+                if (response.data == 3) {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.error('Xác nhận', 'Xác nhận thất bại!');
+                    $scope.CodeReset = '';
+                    $scope.EmailReset = '';
+                }
+            })
+    }
+    $scope.ResetPasssWord = function (email, pass) {
+        $http(
+            {
+                method: "POST",
+                url: "/AccountAdmin/ResetPass",
+                dataType: 'json',
+                data: {
+                    email: email,
+                    pass: pass
+                },
+                headers: { "Content-Type": "application/json" }
+            }).then(function (response) {
+                if (response.data) {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.success('Đổi mật khẩu', 'Đổi mật khẩu thành công!');
+                    $scope.frmLogin = false;
+                    $scope.frmForgetPassW = true;
+                    $scope.frmResetPassW = true;
+                    $scope.EmailSend = '';
+                    $scope.CodeReset = '';
+                    $scope.PassWordNew = '';
+                    $scope.PassWordNew2 = '';
+
+                }
+                else {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.error('Đổi mật khẩu', 'Đổi mật khẩu thất bại!');
+
+                }
+
+            })
+    }
+    //code login
+    $scope.LogIn = function (email, password) {
         $http(
             {
                 method: "POST",
                 url: "/AccountAdmin/LogInAdmin",
                 dataType: 'json',
                 data: {
-                    email:email,
+                    email: email,
                     pass: password
                 },
                 headers: { "Content-Type": "application/json" }
             }).then(function (response) {
-                switch (response.data) {
-                    case 1:
-                        $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
-                        $notify.setPosition('bottom-left');
-                        $notify.error('Đăng nhập', 'Bạn không có quyền vào trang này!');
-                        break;
-                    case 2:
-                        $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
-                        $notify.setPosition('bottom-left');
-                        $notify.error('Đăng nhập', 'Tài khoản của bạn đã bị khóa, hãy liên hệ quản lý trang!');
-                        break;
-                    case 3:
-                        $window.location.href = '/AccountAdmin/Account';
-                        break;
-                    case 4:
-                        $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
-                        $notify.setPosition('bottom-left');
-                        $notify.error('Đăng nhập', 'Mật khẩu hoặc tài khoản sai!');
-                        break;
+                if (response.data == 1) {
+                    $window.location.href = '/AccountAdmin/Account';
                 }
-                   
+                else {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.error('Đăng nhập', response.data);
+                }
             })
     }
-})
+});
+myCntr.controller("AccountDetail", function ($scope, $http, Upload, $notify, $window) {
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "24" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewDetailAcc = false;
+            }
+            else {
+                $window.location.href = '/Page/404/index.html';
+            }
+        })
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "12" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutViewCmt = false;
+            }
+            else {
+                $scope.CheckAutViewCmt = true;
+            }
+        })
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "12" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutDelCmt = false;
+            }
+            else {
+                $scope.CheckAutDelCmt = true;
+            }
+        })
+    $http(
+        {
+            method: "POST",
+            url: "/GroupUser/checkAuthorities",
+            dataType: 'json',
+            data: { Authorities: "25" }
+        }).then(function (response) {
+            if (response.data) {
+                $scope.CheckAutActive = false;
+            }
+            else {
+                $scope.CheckAutActive = true;
+            }
+        })
+    $scope.CheckDetail = function (id) {
+        user(id);
+    }
+    function user(id) {
+        $http(
+            {
+                method: "POST",
+                url: "/AccountAdmin/AccById1",
+                dataType: 'json',
+                data: { id: id },
+                headers: { "Content-Type": "application/json" }
+            }).then(function (response) {
+                if (response.data == false) {
+                    $scope.dataUser = '';
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.warning('Xem chi tiết', 'Đã có lỗi, không tìm được thông tin!');
+                }
+                else {
+                    $scope.dataUser = response.data;
+                }
+            })
+    }
+    $scope.ChangeActive = function (id) {
+        $http(
+            {
+                method: "POST",
+                url: "/AccountAdmin/ChangeActive",
+                dataType: 'json',
+                data: { id: id },
+                headers: { "Content-Type": "application/json" }
+            }).then(function (response) {
+                if (response.data == false) {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.warning('Đổi tình trạng', 'Đổi tình trạng thất bại!');
+                }
+                else {
+                    user(id);
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.success('Đổi tình trạng', 'Đổi tình trạng thành công!');
+                }
+            })
+    }
+    AllGroupUser();
+    function AllGroupUser() {
+        $http(
+            {
+                method: "GET",
+                url: "/GroupUser/AllGroup",
+                headers: { "Content-Type": "application/json" }
+            }).then(function (response) {
+                $scope.dataGroupUser = response.data;
+            })
+    }
+    $scope.changeTypeUser = function (id, type) {
+        if (type != "") {
+            $http(
+                {
+                    method: "POST",
+                    url: "/AccountAdmin/ChangeTypeAcc",
+                    dataType: 'json',
+                    data: {
+                        id: id,
+                        type: type
+                    },
+                    headers: { "Content-Type": "application/json" }
+                }).then(function (response) {
+                    if (response.data) {
+                        user(id);
+                        $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                        $notify.setPosition('bottom-left');
+                        $notify.success('Đổi loại tài khoản', 'Đổi loại tài khoản thành công!');
+                    }
+                    else {
+                        $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                        $notify.setPosition('bottom-left');
+                        $notify.error('Đổi loại tài khoản', 'Đổi loại tài khoản thất bại!');
+                    }
+                })
+        }
+    }
+    $scope.pageSize = 4;
+    $scope.selectedPage = 1;
+    $scope.selectPage = function (page) {
+        $scope.selectedPage = page;
+    }
+    $scope.toPage = function (page) {
+        $scope.selectedPage = page;
+    }
+    $scope.goToPrev = function () {
+        if ($scope.selectedPage > 1)
+            $scope.selectedPage--;
+    }
+    $scope.goToNext = function (page) {
+        if ($scope.data != null) {
+            if ($scope.selectedPage < $scope.data.length)
+                $scope.selectedPage++;
+        }
+    }
+    $scope.PagePrevActive = function () {
+        return $scope.selectedPage == 1 ? 'ng-hide' : 'ng-show';
+    }
+    $scope.PageNextActive = function (page) {
+        if ($scope.data != null) {
+            return $scope.selectedPage == $scope.data.length ? 'ng-hide' : 'ng-show';
+        }
+        return 'ng-hide';
+    }
+    $scope.PageActive = function (page) {
+        if ($scope.data.length == 1) {
+            return $scope.selectedPage == page ? 'ng-hide' : '';
+        }
+        else {
+            return $scope.selectedPage == page ? 'btn-danger' : '';
+        }
+    }
+    //phân  trang bình luận
+    $scope.pageSize1 = 6;
+    $scope.selectedPage1 = 1;
+    $scope.selectPage1 = function (page) {
+        $scope.selectedPage1 = page;
+    }
+    $scope.toPage1 = function (page) {
+        $scope.selectedPage1 = page;
+    }
+    $scope.goToPrev1 = function () {
+        if ($scope.selectedPage1 > 1)
+            $scope.selectedPage1--;
+    }
+    $scope.goToNext1 = function (page) {
+        if ($scope.data1 != null) {
+            if ($scope.selectedPage1 < $scope.data1.length)
+                $scope.selectedPage1++;
+        }
+    }
+    $scope.PagePrevActive1 = function () {
+        return $scope.selectedPage1 == 1 ? 'ng-hide' : 'ng-show';
+    }
+    $scope.PageNextActive1 = function (page) {
+        if ($scope.data1 != null) {
+            return $scope.selectedPage1 == $scope.data1.length ? 'ng-hide' : 'ng-show';
+        }
+        return 'ng-hide';
+    }
+    $scope.PageActive1 = function (page) {
+        if ($scope.data1.length == 1) {
+            return $scope.selectedPage1 == page ? 'ng-hide' : '';
+        }
+        else {
+            return $scope.selectedPage1 == page ? 'btn-danger' : '';
+        }
+    }
+    GetAllStatus();
+    function GetAllStatus() {
+        $http(
+            {
+                method: "Get",
+                url: "/OrderAdmin/AllStatust"
+            }).then(function (response) {
+
+                $scope.message = "";
+                $scope.dataStatus = response.data;
+            }
+            )
+    }
+    $scope.HideViewOrder = true;
+    $scope.HideViewCmt = true;
+    $scope.ViewCmt = function (id) {
+        $scope.HideViewOrder = true;
+        $scope.HideViewCmt = false;
+        viewComment();
+    }
+    function viewComment() {
+        $http(
+            {
+                method: "Get",
+                url: "/CommentAdmin/All",
+            }).then(function (res) {
+                $scope.dataCmt = res.data;
+            }
+            )
+    }
+    $scope.ViewOrder = function (id) {
+        $scope.HideViewOrder = false;
+        $scope.HideViewCmt = true;
+
+        $http(
+            {
+                method: "POST",
+                url: "/OrderAdmin/BillByCreator",
+                dataType: 'json',
+                data: {
+                    _id: id
+                },
+                headers: { "Content-Type": "application/json" }
+            }).then(function (response) {
+                if (response.data != '') {
+                    $scope.dataBill = response.data;
+                }
+                else {
+                    $scope.dataBill = '';
+                }
+            })
+    }
+    allProd();
+    function allProd() {
+        $http(
+            {
+                method: "Get",
+                url: "/ProductAdmin/ListProduct"
+            }).then(function (response) {
+                $scope.dataProd = response.data;
+            })
+    }
+    $scope.RemoveCmt = function (id) {
+        $http(
+            {
+                method: "POST",
+                url: "/CommentAdmin/Delete",
+                dataType: 'json',
+                data: {
+                    id: id
+                },
+                headers: { "Content-Type": "application/json" }
+            }).then(function (response) {
+                if (response.data != false) {
+                    viewComment();
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.success('Xóa bình luận', 'Xóa bình luận thành công!');
+
+                }
+                else {
+                    $notify.setTime(2).setPosition('bottom-right').showCloseButton(true).showProgressBar(true);
+                    $notify.setPosition('bottom-left');
+                    $notify.errr('Xóa bình luận', 'Xóa bình luận thất bại!');
+                }
+            })
+    }
+});
